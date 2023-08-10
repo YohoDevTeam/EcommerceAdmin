@@ -16,6 +16,7 @@ import Calender from './Calender/index'
 import Message from "./Message/index";
 import Companies from './Companies/index';
 import Contacts from "./Contacts/Contacts";
+import CategoryDetail from "./CategoryDetail";
 export {
   Business,
   Contacts,
@@ -34,6 +35,6 @@ export {
   Invoices,
   Calender,
   Message,
-  Companies
-
+  Companies,
+  CategoryDetail
 };

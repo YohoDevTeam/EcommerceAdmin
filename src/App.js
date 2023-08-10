@@ -17,7 +17,8 @@ import {
   Invoices,
   Companies,
   Message,
-  Calender
+  Calender,
+  CategoryDetail,
 } from "../src/pages";
 import { Routes, Route } from "react-router-dom";
 
@@ -42,6 +43,9 @@ const App = () => {
       <Route path="/Authentication" element={<Authentication />} />
       <Route path="/SignIn" element={<SignIn />} />
       <Route path="/SignUp" element={<SignUp />} />
+      <Route
+        path="/CategoryDetail" element={<CategoryDetail />}
+      />
     </Routes>
   );
 };

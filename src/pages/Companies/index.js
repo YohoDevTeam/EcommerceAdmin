@@ -800,11 +800,10 @@ const Orders = () => {
               <Table striped bordered hover variant="" className="mt-4" responsive>
       <thead>
         <tr>
-          <th>Id</th>
-          <th>UserName</th>
-          <th>Address</th>
-          <th>Products</th>
-          <th>Total</th>
+          <th>Order Id</th>
+          <th>Customer Id</th>
+          <th>Date</th>
+          <th>Total Amount</th>
           <th>Status</th>
           <th></th>
           
@@ -813,10 +812,10 @@ const Orders = () => {
       <tbody>
         <tr>
           <td>1</td>
-          <td>Arun</td>
-          <td>Ambal Nagar</td> 
-         <td>shoe</td>
-         <td>200</td>
+          <td>abc</td>
+          <td>29-5-22</td> 
+         <td>500</td>
+         
           <td>active</td>
           <td>
           <div>

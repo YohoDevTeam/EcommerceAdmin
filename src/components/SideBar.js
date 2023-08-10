@@ -275,7 +275,7 @@ export default function SideBar() {
                 <ViewCarouselIcon  />
               </ListItemIcon>
               <ListItemText
-                primary="Coursel"
+                primary="Carousel"
                 sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>

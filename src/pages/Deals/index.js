@@ -65,6 +65,17 @@ const Deals = () => {
   };
   const handleModel = () => setCancelModel(false);
 
+
+  const [openModel1, setOpenModel1] = React.useState(false);
+  const handleOpenModel1 = () => {
+    setOpenModel1(true);
+    handleClose4();
+  };
+  const handleCloseModel1 = () => setOpenModel1(false);
+
+
+
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -122,12 +133,19 @@ const Deals = () => {
                 <FormLabel className="fw-bold mt-2">Description</FormLabel>
                 <FormControl type="text" />
 
-             
+                 
+
+                    
                 <Row className="mt-2">
-                
                   <Col>
                     <FormLabel className="fw-bold">Price</FormLabel>
                     <FormControl type="number" />
+                    </Col>
+                  <Col>
+                    <FormLabel className="fw-bold">Quantity</FormLabel>
+                    <FormControl type="number" />
+                    </Col>
+                     </Row>
 
                     <FormLabel className="mt-2 fw-bold">Status</FormLabel>
                     <Form.Select className="fw-bold " >
@@ -136,8 +154,7 @@ const Deals = () => {
                                    <option value="2">In Active</option>
                                           
                                        </Form.Select>
-                  </Col>
-                </Row>
+                
                 
                 <Row className="mt-3">
                   <Col>
@@ -221,23 +238,78 @@ const Deals = () => {
             </Box>
           </Modal>
 
-          <div style={{ overflowX: "hidden" }}>
-            <div>
-              <Form className="d-flex">
-                
-                
-                  
-                    <Form.Control placeholder="Search" className="w-25"  />
-                  
+          <Modal
+            keepMounted
+            open={openModel1}
+            onClose={handleCloseModel1}
+            aria-labelledby="keep-mounted-modal-title"
+            aria-describedby="keep-mounted-modal-description"
+          >
+            <Box sx={style}>
+              <Typography
+                id="keep-mounted-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                 Add New Product
+              </Typography>
+              <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                <Row>
+                 
+                  <Col>
+                    <FormLabel className="fw-bold">Name</FormLabel>
+                    <FormControl type="text" />
+                  </Col>
+                </Row>
+                <FormLabel className="fw-bold mt-2">Images</FormLabel>
+                <FormControl type="file" multiple />
+                <FormLabel className="fw-bold mt-2">Description</FormLabel>
+                <FormControl type="text" />
 
-                  
+                  <Row className="mt-2">
+                  <Col>
+                    <FormLabel className="fw-bold">Price</FormLabel>
+                    <FormControl type="number" />
+                    </Col>
+                  <Col>
+                    <FormLabel className="fw-bold">Quantity</FormLabel>
+                    <FormControl type="number" />
+                    </Col>
+                     </Row>
+                    <FormLabel className="mt-2 fw-bold">Status</FormLabel>
+                    <Form.Select className="fw-bold " >
+                            <option>-----</option>
+                              <option value="1">Active</option>
+                                   <option value="2">In Active</option>
+                         </Form.Select>                 
+                 
+                
+                <Row className="mt-3">
+                  <Col>
+                    <Button variant="secondary" onClick={handleCloseModel1}>
+                      Close
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button variant="primary" onClick={handleCloseModel1}>
+                      Save Changes
+                    </Button>
+                  </Col>
+                </Row>
+              </Typography>
+            </Box>
+          </Modal>
+
+          <div style={{ overflowX: "hidden" }}>
+            <div className="d-flex justify-content-between">
+              <Form className="d-flex">
+                    <Form.Control placeholder="Search" className="w-50"  />
                     <Button type="Search Orders" className="mx-2">
                       <BiSearch />
                       Search
                     </Button>
-                
-              
               </Form>
+              <Button onClick={handleOpenModel1}>Add Product</Button>
             </div>
 
             <div>
@@ -341,11 +413,15 @@ const Deals = () => {
                     <thead>
                       <tr>
                         <th>Id</th>
-                        <th>Name</th>
+                        <th>Title</th>
                         <th>
                          Images
                         </th>
-                        <th>Description</th>
+                        <th>Caption</th>
+                        <th>Total Quantity</th>
+                        <th>Current Quantity</th>
+                        <th>Sold Quantity</th>
+
                         <th>Price</th>
 
                         <th>Status</th>
@@ -356,13 +432,16 @@ const Deals = () => {
                     <tbody>
                       <tr>
                         <td>1</td>
-                        <td>Arun</td>
+                        <td>food</td>
                         <td> <img
                             src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
                             style={{ width: 50, height: 50,borderRadius:50 }}
                           /></td>
                         <td>photo</td>
-                        <td>800</td>
+                        <td>600</td>
+                        <td>400</td>
+                        <td>200</td>
+                        <td>Rs.600</td>
                         <td>active</td>
                         
                         <td>

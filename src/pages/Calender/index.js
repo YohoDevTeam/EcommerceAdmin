@@ -206,7 +206,7 @@ const Calender = () => {
         <tr>
           <th>Id</th>
           <th>Image</th>
-          <th>First Name</th>
+          <th>Full Name</th>
           <th>Nick Name</th>
           <th>Date of Birth</th>
           <th>Email</th>
