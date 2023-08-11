@@ -9,14 +9,15 @@ import Onboarding from "./Onboarding/index";
 import Authentication from "./Authentication/index";
 import SignIn from "./Authentication/SignIn";
 import SignUp from "./Authentication/SignUp";
-import Deals from './Deals/index'
-import Document from './Document/index'
+import ProductList from './ProductList/index'
+import Carousel from './Carousel/index'
 import Invoices from "./Sales/Invoices";
-import Calender from './Calender/index'
-import Message from "./Message/index";
-import Companies from './Companies/index';
+import Users from './Users/index'
+import Category from "./Category/index";
+import Orders from './Orders/index';
 import Contacts from "./Contacts/Contacts";
-import CategoryDetail from "./CategoryDetail";
+import OrderDetail from "./OrderDetail";
+import OrderProductDetail from "./OrderProductDetail"
 export {
   Business,
   Contacts,
@@ -30,11 +31,12 @@ export {
   Authentication,
   SignIn,
   SignUp,
-  Deals,
-  Document,
+  ProductList,
+  Carousel,
   Invoices,
-  Calender,
-  Message,
-  Companies,
-  CategoryDetail
+  Users,
+  Category,
+  Orders,
+  OrderDetail,
+  OrderProductDetail
 };

@@ -19,7 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 
-const Calender = () => {
+const Users = () => {
   const ITEM_HEIGHT = 48;
 
 
@@ -38,7 +38,9 @@ const Calender = () => {
     setOpenModel(true);
     handleClose4();
   };
-  const handleCloseModel = () => setOpenModel(false);
+  const handleCloseModel = () =>  setOpenModel(false);
+
+
 
   const [DeleteModel, setDeleteModel] = React.useState(false);
   const handleDeleteModel = () => {
@@ -47,13 +49,23 @@ const Calender = () => {
   };
   const handleRemoveModel = () => setDeleteModel(false);
 
+  
+
   const [CancelModel, setCancelModel] = React.useState(false);
   const handleCancelModel = () => {
     setCancelModel(true);
     handleClose4();
   };
-  const handleModel = () => setCancelModel(false);
+  const handleModel = () =>{ 
+    setCancelModel(false)
+     handleCloseModel()
+    };
   
+
+
+
+
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -106,7 +118,7 @@ const Calender = () => {
                     </Button>
                   </Col>
                   <Col>
-                    <Button variant="primary" onClick={handleCloseModel}>
+                    <Button variant="primary" onClick={handleCancelModel}>
                       Save Changes
                     </Button>
                   </Col>
@@ -161,10 +173,10 @@ const Calender = () => {
                 variant="h6"
                 component="h2"
               >
-                Delete
+                
               </Typography>
               <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                Are you sure you want to Cancel this item?
+                Are you sure you want to save the Changes?
                 <Row className="mt-3">
                   <Col>
                     <Button variant="secondary" onClick={handleModel}>
@@ -172,7 +184,7 @@ const Calender = () => {
                     </Button>
                   </Col>
                   <Col>
-                    <Button variant="primary" onClick={handleModel}>
+                    <Button variant="primary" onClick={()=>setCancelModel(false)}>
                       No
                     </Button>
                   </Col>
@@ -187,15 +199,10 @@ const Calender = () => {
           
                   
                     <Form.Control placeholder="Search" className='w-25' />
-                  
-
-                  
                     <Button type="text" className="mx-2">
                       <BiSearch />
                       Search
                     </Button>
-              
-                
               </Form>
 
             </div>
@@ -275,12 +282,7 @@ const Calender = () => {
                                   }}
                                 />
                               </MenuItem>
-                              {/* <MenuItem
-                                key="Cancel"
-                                 onClick={handleCancelModel}
-                              >
-                                Cancel Order
-                              </MenuItem> */}
+                              
                             </Menu>
                           </div>
           </td>
@@ -302,4 +304,4 @@ const Calender = () => {
   );
 };
 
-export default Calender;
+export default Users;

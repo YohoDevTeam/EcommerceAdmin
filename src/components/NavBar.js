@@ -28,6 +28,7 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import Popover from "@mui/material/Popover";
+import Logo from "../images/logo.png";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -226,9 +227,9 @@ export default function NavBar() {
             </IconButton>
             <div className="d-flex my-auto d-block align-items-center">
               <img
-                src="https://cdn-icons-png.flaticon.com/128/2136/2136302.png"
-                width={20}
-                height={20}
+                src={Logo}
+                // width={120}
+                 height={30}
                 style={{ marginRight: 10 }}
               />
 
@@ -242,7 +243,7 @@ export default function NavBar() {
                   color: "black",
                 }}
               >
-                Rombus
+                
               </Typography>
             </div>
           </div>

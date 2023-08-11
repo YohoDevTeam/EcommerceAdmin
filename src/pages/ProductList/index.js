@@ -33,7 +33,7 @@ import Table from "react-bootstrap/Table";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 
-const Deals = () => {
+const ProductList = () => {
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -73,6 +73,26 @@ const Deals = () => {
   };
   const handleCloseModel1 = () => setOpenModel1(false);
 
+
+  const [AddModel, setAddModel] = React.useState(false);
+  const handleAddModel = () => {
+    setAddModel(true);
+    handleClose4();
+  };
+  const handleAddiModel = () =>{
+     setAddModel(false);
+       handleCloseModel1();
+  }
+
+  const [EditModel, setEditModel] = React.useState(false);
+  const handleEditModel = () => {
+    setEditModel(true);
+    handleClose4();
+  };
+  const handleEditiModel = () =>{
+     setEditModel(false);
+       handleCloseModel();
+  }
 
 
 
@@ -163,7 +183,7 @@ const Deals = () => {
                     </Button>
                   </Col>
                   <Col>
-                    <Button variant="primary" onClick={handleCloseModel}>
+                    <Button variant="primary" onClick={handleEditModel}>
                       Save Changes
                     </Button>
                   </Col>
@@ -287,18 +307,91 @@ const Deals = () => {
                 <Row className="mt-3">
                   <Col>
                     <Button variant="secondary" onClick={handleCloseModel1}>
-                      Close
+                      Cancel
                     </Button>
                   </Col>
                   <Col>
-                    <Button variant="primary" onClick={handleCloseModel1}>
-                      Save Changes
+                    <Button variant="primary" onClick={handleAddModel}>
+                      Add
                     </Button>
                   </Col>
                 </Row>
               </Typography>
             </Box>
           </Modal>
+
+          <Modal
+              keepMounted
+              open={AddModel}
+              onClose={handleAddiModel}
+              aria-labelledby="keep-mounted-modal-title"
+              aria-describedby="keep-mounted-modal-description"
+            >
+              <Box sx={style}>
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                
+                </Typography>
+                <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                 
+                  Are you want to add the Product?
+
+                  <Row className="mt-3">
+                    <Col>
+                    <Button variant="primary" onClick={handleAddiModel}>
+                        yes
+                      </Button> 
+                    </Col>
+                    <Col>
+                    <Button variant="secondary" onClick={()=>setAddModel(false)}>
+                        No
+                      </Button>
+                      
+                    </Col>
+                  </Row>
+                </Typography>
+              </Box>
+            </Modal>
+           
+            <Modal
+              keepMounted
+              open={EditModel}
+              onClose={handleEditiModel}
+              aria-labelledby="keep-mounted-modal-title"
+              aria-describedby="keep-mounted-modal-description"
+            >
+              <Box sx={style}>
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                
+                </Typography>
+                <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                 
+                  Are you want to Edit the Product?
+
+                  <Row className="mt-3">
+                    <Col>
+                    <Button variant="primary" onClick={handleEditiModel}>
+                        yes
+                      </Button> 
+                    </Col>
+                    <Col>
+                    <Button variant="secondary" onClick={()=>setEditModel(false)}>
+                        No
+                      </Button>
+                      
+                    </Col>
+                  </Row>
+                </Typography>
+              </Box>
+            </Modal>
+
 
           <div style={{ overflowX: "hidden" }}>
             <div className="d-flex justify-content-between">
@@ -314,90 +407,7 @@ const Deals = () => {
 
             <div>
               
-                {/* <Col lg={2}>
-                  <Accordion>
-                    <Accordion.Item eventKey="0">
-                      <Accordion.Header>Filter</Accordion.Header>
-                      <Accordion.Body>
-                        <div>
-                          <h6 style={{ fontWeight: "bold" }}>CATEGORIES</h6>
-                        </div>
-
-                        <div style={{ display: "flex" }}>
-                          <Form.Check
-                            aria-label="option 1"
-                            style={{ marginRight: 10 }}
-                          />
-                          <p>Mobiles</p>
-                        </div>
-
-                        <div style={{ display: "flex" }}>
-                          <Form.Check
-                            aria-label="option 1"
-                            style={{ marginRight: 10 }}
-                          />
-                          <p>Fashion</p>
-                        </div>
-
-                        <div style={{ display: "flex" }}>
-                          <Form.Check
-                            aria-label="option 1"
-                            style={{ marginRight: 10 }}
-                          />
-                          <p>Electronics</p>
-                        </div>
-
-                        <div style={{ display: "flex" }}>
-                          <Form.Check
-                            aria-label="option 1"
-                            style={{ marginRight: 10 }}
-                          />
-                          <p>TVs & Appliances</p>
-                        </div>
-
-                        <div style={{ display: "flex" }}>
-                          <Form.Check
-                            aria-label="option 1"
-                            style={{ marginRight: 10 }}
-                          />
-                          <p>Sports</p>
-                        </div>
-
-                        <div style={{ display: "flex" }}>
-                          <Form.Check
-                            aria-label="option 1"
-                            style={{ marginRight: 10 }}
-                          />
-                          <p>Home & Furniture</p>
-                        </div>
-
-                        <div style={{ display: "flex" }}>
-                          <Form.Check
-                            aria-label="option 1"
-                            style={{ marginRight: 10 }}
-                          />
-                          <p>Baby & Kids</p>
-                        </div>
-
-                        <div style={{ display: "flex" }}>
-                          <Form.Check
-                            aria-label="option 1"
-                            style={{ marginRight: 10 }}
-                          />
-                          <p>Grocery</p>
-                        </div>
-
-                        <div style={{ display: "flex" }}>
-                          <Form.Check
-                            aria-label="option 1"
-                            style={{ marginRight: 10 }}
-                          />
-                          <p>Beauty</p>
-                        </div>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                </Col> */}
+              
 
                 
                   <Table
@@ -819,4 +829,4 @@ const Deals = () => {
   );
 };
 
-export default Deals;
+export default ProductList;

@@ -33,8 +33,10 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-const Message = () => {
+const Category = () => {
   const ITEM_HEIGHT = 48;
+
+  const status = " InActive"
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -83,6 +85,18 @@ const Message = () => {
   };
   const handleModel = () => setCancelModel(false);
 
+
+  const [EditModel, setEditModel] = React.useState(false);
+  const handleEditModel = () => {
+    setEditModel(true);
+    handleClose();
+  };
+  const handleEditiModel = () =>{
+     setEditModel(false);
+       handleCloseModel();
+  }
+
+
   return (
     <>
       <NavBar />
@@ -125,7 +139,7 @@ const Message = () => {
                     </Button>
                   </Col>
                   <Col>
-                    <Button variant="primary" onClick={handleCloseModel}>
+                    <Button variant="primary" onClick={handleEditModel}>
                       Save Changes
                     </Button>
                   </Col>
@@ -237,12 +251,12 @@ const Message = () => {
                 <Row className="mt-3">
                   <Col>
                     <Button variant="secondary" onClick={handleCloseModel1}>
-                      Close
+                      Cancel
                     </Button>
                   </Col>
                   <Col>
                     <Button variant="primary" onClick={handleOpenModel2}>
-                      Save Changes
+                      Add
                     </Button>
                   </Col>
                 </Row>
@@ -264,7 +278,7 @@ const Message = () => {
                 component="h2"
               ></Typography>
               <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                Are you want to save the changes?
+                Are you want to add the category?
                 <Row className="mt-3">
                   <Col>
                     <Button variant="secondary" onClick={handleCloseModel2}>
@@ -280,6 +294,43 @@ const Message = () => {
               </Typography>
             </Box>
           </Modal>
+
+          <Modal
+              keepMounted
+              open={EditModel}
+              onClose={handleEditiModel}
+              aria-labelledby="keep-mounted-modal-title"
+              aria-describedby="keep-mounted-modal-description"
+            >
+              <Box sx={style}>
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                
+                </Typography>
+                <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                 
+                  Are you want to Edit the Product?
+
+                  <Row className="mt-3">
+                    <Col>
+                    <Button variant="primary" onClick={handleEditiModel}>
+                        yes
+                      </Button> 
+                    </Col>
+                    <Col>
+                    <Button variant="secondary" onClick={()=>setEditModel(false)}>
+                        No
+                      </Button>
+                      
+                    </Col>
+                  </Row>
+                </Typography>
+              </Box>
+            </Modal>
+
 
           <div className="d-flex justify-content-between">
             <Form className="d-flex">
@@ -323,7 +374,7 @@ const Message = () => {
                   />
                 </td>
 
-                <td>active</td>
+                <td style={{color:status=="Active"?"green":"red"}}>{status}</td>
 
                 <td>
                   <div>
@@ -372,4 +423,4 @@ const Message = () => {
   );
 };
 
-export default Message;
+export default Category;

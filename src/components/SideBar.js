@@ -198,7 +198,7 @@ export default function SideBar() {
             disablePadding
             sx={{ display: "block" }}
             onClick={() => {
-              navigate("/Message");
+              navigate("/Category");
             }}
           >
             <ListItemButton
@@ -226,7 +226,7 @@ export default function SideBar() {
             disablePadding
             sx={{ display: "block" }}
             onClick={() => {
-              navigate("/Deals");
+              navigate("/ProductList");
             }}
           >
             <ListItemButton
@@ -254,7 +254,7 @@ export default function SideBar() {
             disablePadding
             sx={{ display: "block" }}
             onClick={() => {
-              navigate("/Document");
+              navigate("/Carousel");
             }}
           >
             <ListItemButton
@@ -287,8 +287,8 @@ export default function SideBar() {
             sx={{ display: "block" }}
             onClick={() => {
              
-              setRoute("Companies");
-              navigate("/Companies");
+              setRoute("Orders");
+              navigate("/Orders");
 
             }}
           >
@@ -441,7 +441,7 @@ export default function SideBar() {
             disablePadding
             sx={{ display: "block" }}
             onClick={() => {
-              navigate("/Calender");
+              navigate("/Users");
             }}
           >
             <ListItemButton
@@ -461,7 +461,7 @@ export default function SideBar() {
                 {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
                 <PersonIcon />
               </ListItemIcon>
-              <ListItemText primary="User" sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText primary="Users" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
 

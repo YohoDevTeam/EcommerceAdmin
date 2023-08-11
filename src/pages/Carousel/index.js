@@ -22,8 +22,9 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import Dropdown from "react-bootstrap/Dropdown";
 import { BiSearch } from "react-icons/bi";
+import { CarCrash } from "@mui/icons-material";
 
-const Document = () => {
+const Carousel = () => {
   const style = {
     position: "absolute",
     top: "50%",
@@ -54,6 +55,7 @@ const Document = () => {
   };
   const handleCloseModel = () => setOpenModel(false);
 
+
   const [DeleteModel, setDeleteModel] = React.useState(false);
   const handleDeleteModel = () => {
     setDeleteModel(true);
@@ -61,12 +63,37 @@ const Document = () => {
   };
   const handleRemoveModel = () => setDeleteModel(false);
 
+
   const [CancelModel, setCancelModel] = React.useState(false);
   const handleCancelModel = () => {
     setCancelModel(true);
     handleClose();
   };
   const handleModel = () => setCancelModel(false);
+
+
+   const [AddModel, setAddModel] = React.useState(false);
+  const handleAddModel = () => {
+    setAddModel(true);
+    handleClose();
+  };
+  const handleAddiModel = () =>{
+     setAddModel(false);
+       handleModel();
+  }
+
+
+  const [CancelModel1, setCancelModel1] = React.useState(false);
+  const handleCancelModel1 = () => {
+    setCancelModel1(true);
+    handleClose();
+  };
+  const handleModel1 = () =>{
+     setCancelModel1(false);
+     handleCloseModel();
+  }
+
+
 
   return (
     <>
@@ -76,6 +103,7 @@ const Document = () => {
         <SideBar />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <div style={{ backgroundColor: "#F5F5F5", overflowX: "hidden" }}>
+         
             <Modal
               keepMounted
               open={openModel}
@@ -116,7 +144,7 @@ const Document = () => {
                       </Button>
                     </Col>
                     <Col>
-                      <Button variant="primary" onClick={handleCloseModel}>
+                      <Button variant="primary" onClick={handleCancelModel1}>
                         Save Changes
                       </Button>
                     </Col>
@@ -194,13 +222,83 @@ const Document = () => {
                   <Row className="mt-3">
                     <Col>
                       <Button variant="secondary" onClick={handleModel}>
-                        Yes
+                        Cancel
                       </Button>
                     </Col>
                     <Col>
-                      <Button variant="primary" onClick={handleModel}>
-                        No
+                       <Button variant="primary" onClick={handleAddModel}>
+                        Add
+                      </Button> 
+                    </Col>
+                  </Row>
+                </Typography>
+              </Box>
+            </Modal>
+
+            <Modal
+              keepMounted
+              open={CancelModel1}
+              onClose={handleModel1}
+              aria-labelledby="keep-mounted-modal-title"
+              aria-describedby="keep-mounted-modal-description"
+            >
+              <Box sx={style}>
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                  
+                </Typography>
+                <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+               Are you want to save the changes?
+
+                  <Row className="mt-3">
+                    <Col>
+                      <Button variant="secondary" onClick={handleModel1}>
+                        yes
                       </Button>
+                    </Col>
+                    <Col>
+                       <Button variant="primary" onClick={()=>setCancelModel1(false)}>
+                        No
+                      </Button> 
+                    </Col>
+                  </Row>
+                </Typography>
+              </Box>
+            </Modal>
+
+            <Modal
+              keepMounted
+              open={AddModel}
+              onClose={handleAddiModel}
+              aria-labelledby="keep-mounted-modal-title"
+              aria-describedby="keep-mounted-modal-description"
+            >
+              <Box sx={style}>
+                <Typography
+                  id="keep-mounted-modal-title"
+                  variant="h6"
+                  component="h2"
+                >
+                
+                </Typography>
+                <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                 
+                  Are you want to add the Carousel?
+
+                  <Row className="mt-3">
+                    <Col>
+                    <Button variant="primary" onClick={handleAddiModel}>
+                        Add
+                      </Button> 
+                    </Col>
+                    <Col>
+                    <Button variant="secondary" onClick={()=>setAddModel(false)}>
+                        Cancel
+                      </Button>
+                      
                     </Col>
                   </Row>
                 </Typography>
@@ -299,4 +397,4 @@ const Document = () => {
   );
 };
 
-export default Document;
+export default Carousel;
