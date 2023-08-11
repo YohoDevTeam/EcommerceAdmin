@@ -28,7 +28,7 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import Popover from "@mui/material/Popover";
-import Logo from "../images/logo.png";
+import Logo from "../images/Logo.png";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
