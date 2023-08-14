@@ -25,6 +25,19 @@ import { BiSearch } from "react-icons/bi";
 import { CarCrash } from "@mui/icons-material";
 
 const Carousel = () => {
+  //Hooks
+
+  const [carouselName, setCarouselName] = useState("");
+  const [carouselImage, setCarouselImage] = useState("");
+  const [carouselDescription, setCarouselDescription] = useState("");
+  const [carouselStatus, setCarouselStatus] = useState("");
+
+  const handleDeleteCarousel = () => {};
+
+  const handleAddCarousel = () => {};
+
+  const handleEditCarousel = () => {};
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -32,7 +45,7 @@ const Carousel = () => {
     transform: "translate(-50%, -50%)",
     width: 400,
     bgcolor: "background.paper",
-    border: "2px solid #000",
+    // border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
@@ -55,14 +68,12 @@ const Carousel = () => {
   };
   const handleCloseModel = () => setOpenModel(false);
 
-
   const [DeleteModel, setDeleteModel] = React.useState(false);
   const handleDeleteModel = () => {
     setDeleteModel(true);
     handleClose();
   };
   const handleRemoveModel = () => setDeleteModel(false);
-
 
   const [CancelModel, setCancelModel] = React.useState(false);
   const handleCancelModel = () => {
@@ -71,29 +82,25 @@ const Carousel = () => {
   };
   const handleModel = () => setCancelModel(false);
 
-
-   const [AddModel, setAddModel] = React.useState(false);
+  const [AddModel, setAddModel] = React.useState(false);
   const handleAddModel = () => {
     setAddModel(true);
     handleClose();
   };
-  const handleAddiModel = () =>{
-     setAddModel(false);
-       handleModel();
-  }
-
+  const handleAddiModel = () => {
+    setAddModel(false);
+    handleModel();
+  };
 
   const [CancelModel1, setCancelModel1] = React.useState(false);
   const handleCancelModel1 = () => {
     setCancelModel1(true);
     handleClose();
   };
-  const handleModel1 = () =>{
-     setCancelModel1(false);
-     handleCloseModel();
-  }
-
-
+  const handleModel1 = () => {
+    setCancelModel1(false);
+    handleCloseModel();
+  };
 
   return (
     <>
@@ -103,7 +110,6 @@ const Carousel = () => {
         <SideBar />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <div style={{ backgroundColor: "#F5F5F5", overflowX: "hidden" }}>
-         
             <Modal
               keepMounted
               open={openModel}
@@ -117,38 +123,55 @@ const Carousel = () => {
                   variant="h6"
                   component="h2"
                 >
-                  Edit Detail
+                  Edit Carousel Detail
                 </Typography>
                 <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
                   <Form.Label className="fw-bold">Name</Form.Label>
-                  <FormControl type="text" />
-                  <Form.Label className="fw-bold mt-2">Images</Form.Label>
-                  <FormControl type="file" multiple />
+                  <FormControl
+                    type="text"
+                    value={carouselName}
+                    onChange={(event) => setCarouselName(event.target.value)}
+                  />
+                  <Form.Label className="fw-bold mt-2">Image</Form.Label>
+                  <FormControl
+                    type="file"
+                    onChange={(event) =>
+                      setCarouselImage(event.target.files[0])
+                    }
+                  />
 
                   <Form.Label className="fw-bold mt-2">Description</Form.Label>
-                  <FormControl type="text" />
-
-                 
+                  <FormControl
+                    type="text"
+                    value={carouselDescription}
+                    onChange={(event) =>
+                      setCarouselDescription(event.target.value)
+                    }
+                  />
 
                   <Form.Label className="mt-2 fw-bold">Status</Form.Label>
-                  <Form.Select className="fw-bold ">
+                  <Form.Select
+                    className="fw-bold "
+                    value={carouselStatus}
+                    onChange={(event) => setCarouselStatus(event.target.value)}
+                  >
                     <option>-----</option>
                     <option value="1">Active</option>
                     <option value="2">In Active</option>
                   </Form.Select>
 
-                  <Row className="mt-3">
-                    <Col>
+                  <div className="mt-5 d-flex justify-content-between align-items-center">
+                    <div>
                       <Button variant="secondary" onClick={handleCloseModel}>
                         Close
                       </Button>
-                    </Col>
-                    <Col>
+                    </div>
+                    <div>
                       <Button variant="primary" onClick={handleCancelModel1}>
                         Save Changes
                       </Button>
-                    </Col>
-                  </Row>
+                    </div>
+                  </div>
                 </Typography>
               </Box>
             </Modal>
@@ -169,19 +192,22 @@ const Carousel = () => {
                   Delete
                 </Typography>
                 <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                  Are you sure you want to remove this item
-                  <Row className="mt-3">
-                    <Col>
-                      <Button variant="secondary" onClick={handleRemoveModel}>
+                  Are you sure you want to delete this Carousel
+                  <div className="mt-5 d-flex justify-content-between align-items-center">
+                    <div>
+                      <Button
+                        variant="secondary"
+                        onClick={handleDeleteCarousel}
+                      >
                         Yes
                       </Button>
-                    </Col>
-                    <Col>
+                    </div>
+                    <div>
                       <Button variant="primary" onClick={handleRemoveModel}>
                         No
                       </Button>
-                    </Col>
-                  </Row>
+                    </div>
+                  </div>
                 </Typography>
               </Box>
             </Modal>
@@ -203,34 +229,51 @@ const Carousel = () => {
                 </Typography>
                 <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
                   <Form.Label className="fw-bold">Name</Form.Label>
-                  <FormControl type="text" />
-                  <Form.Label className="fw-bold mt-2">Images</Form.Label>
-                  <FormControl type="file" multiple />
+                  <FormControl
+                    type="text"
+                    value={carouselName}
+                    onChange={(event) => setCarouselName(event.target.value)}
+                  />
+                  <Form.Label className="fw-bold mt-2">Image</Form.Label>
+                  <FormControl
+                    type="file"
+                    onChange={(event) =>
+                      setCarouselImage(event.target.files[0])
+                    }
+                  />
 
                   <Form.Label className="fw-bold mt-2">Description</Form.Label>
-                  <FormControl type="text" />
-
-                  
+                  <FormControl
+                    type="text"
+                    value={carouselDescription}
+                    onChange={(event) =>
+                      setCarouselDescription(event.target.value)
+                    }
+                  />
 
                   <Form.Label className="mt-2 fw-bold">Status</Form.Label>
-                  <Form.Select className="fw-bold ">
+                  <Form.Select
+                    className="fw-bold "
+                    value={carouselStatus}
+                    onChange={(event) => setCarouselStatus(event.target.value)}
+                  >
                     <option>-----</option>
                     <option value="1">Active</option>
                     <option value="2">In Active</option>
                   </Form.Select>
 
-                  <Row className="mt-3">
-                    <Col>
+                  <div className="mt-5 d-flex justify-content-between align-items-center">
+                    <div>
                       <Button variant="secondary" onClick={handleModel}>
                         Cancel
                       </Button>
-                    </Col>
-                    <Col>
-                       <Button variant="primary" onClick={handleAddModel}>
+                    </div>
+                    <div>
+                      <Button variant="primary" onClick={handleAddModel}>
                         Add
-                      </Button> 
-                    </Col>
-                  </Row>
+                      </Button>
+                    </div>
+                  </div>
                 </Typography>
               </Box>
             </Modal>
@@ -247,24 +290,24 @@ const Carousel = () => {
                   id="keep-mounted-modal-title"
                   variant="h6"
                   component="h2"
-                >
-                  
-                </Typography>
+                ></Typography>
                 <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-               Are you want to save the changes?
-
-                  <Row className="mt-3">
-                    <Col>
-                      <Button variant="secondary" onClick={handleModel1}>
+                  Are you want to save the changes?
+                  <div className="mt-5 d-flex justify-content-between align-items-center">
+                    <div>
+                      <Button variant="secondary" onClick={handleEditCarousel}>
                         yes
                       </Button>
-                    </Col>
-                    <Col>
-                       <Button variant="primary" onClick={()=>setCancelModel1(false)}>
+                    </div>
+                    <div>
+                      <Button
+                        variant="primary"
+                        onClick={() => setCancelModel1(false)}
+                      >
                         No
-                      </Button> 
-                    </Col>
-                  </Row>
+                      </Button>
+                    </div>
+                  </div>
                 </Typography>
               </Box>
             </Modal>
@@ -281,26 +324,24 @@ const Carousel = () => {
                   id="keep-mounted-modal-title"
                   variant="h6"
                   component="h2"
-                >
-                
-                </Typography>
+                ></Typography>
                 <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                 
-                  Are you want to add the Carousel?
-
-                  <Row className="mt-3">
-                    <Col>
-                    <Button variant="primary" onClick={handleAddiModel}>
+                  Are you sure want to add the Carousel?
+                  <div className="mt-5 d-flex justify-content-between align-items-center">
+                    <div>
+                      <Button variant="primary" onClick={handleAddCarousel}>
                         Add
-                      </Button> 
-                    </Col>
-                    <Col>
-                    <Button variant="secondary" onClick={()=>setAddModel(false)}>
+                      </Button>
+                    </div>
+                    <div>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setAddModel(false)}
+                      >
                         Cancel
                       </Button>
-                      
-                    </Col>
-                  </Row>
+                    </div>
+                  </div>
                 </Typography>
               </Box>
             </Modal>
@@ -330,7 +371,7 @@ const Carousel = () => {
                   <th>Name</th>
                   <th>Images</th>
                   <th>Description</th>
-                  
+
                   <th>Status</th>
                   <th></th>
                 </tr>
@@ -346,7 +387,6 @@ const Carousel = () => {
                     />
                   </td>
                   <td>Photo</td>
-                
 
                   <td>active</td>
                   <td>
@@ -388,8 +428,6 @@ const Carousel = () => {
                 </tr>
               </tbody>
             </Table>
-
-            
           </div>
         </Box>
       </Box>

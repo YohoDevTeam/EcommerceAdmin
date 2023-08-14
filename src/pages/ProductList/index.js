@@ -34,6 +34,21 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 
 const ProductList = () => {
+  //Hooks
+  const [productName, setProductName] = useState("");
+  const [productImages, setproductImages] = useState({});
+  const [productDescription, setproductDescription] = useState("");
+  const [productQuantity, setproductQuantity] = useState(0);
+  const [productPrice, setproductPrice] = useState(0);
+  const [productStatus, setproductStatus] = useState("");
+
+  const handleAddNewProduct = () => {};
+
+  const handleEditProduct = () => {};
+
+  const handleDeleteProduct = () => {};
+
+
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -65,7 +80,6 @@ const ProductList = () => {
   };
   const handleModel = () => setCancelModel(false);
 
-
   const [openModel1, setOpenModel1] = React.useState(false);
   const handleOpenModel1 = () => {
     setOpenModel1(true);
@@ -73,28 +87,25 @@ const ProductList = () => {
   };
   const handleCloseModel1 = () => setOpenModel1(false);
 
-
   const [AddModel, setAddModel] = React.useState(false);
   const handleAddModel = () => {
     setAddModel(true);
     handleClose4();
   };
-  const handleAddiModel = () =>{
-     setAddModel(false);
-       handleCloseModel1();
-  }
+  const handleAddiModel = () => {
+    setAddModel(false);
+    handleCloseModel1();
+  };
 
   const [EditModel, setEditModel] = React.useState(false);
   const handleEditModel = () => {
     setEditModel(true);
     handleClose4();
   };
-  const handleEditiModel = () =>{
-     setEditModel(false);
-       handleCloseModel();
-  }
-
-
+  const handleEditiModel = () => {
+    setEditModel(false);
+    handleCloseModel();
+  };
 
   const style = {
     position: "absolute",
@@ -103,7 +114,7 @@ const ProductList = () => {
     transform: "translate(-50%, -50%)",
     width: 400,
     bgcolor: "background.paper",
-    border: "2px solid #000",
+    // border: "2px solid #000",
     boxShadow: 24,
     p: 4,
   };
@@ -128,21 +139,24 @@ const ProductList = () => {
                 variant="h6"
                 component="h2"
               >
-                   <Dropdown>
-      <Dropdown.Toggle variant="success" id="dropdown-basic">
-        Category
-      </Dropdown.Toggle>
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    Category
+                  </Dropdown.Toggle>
 
-      <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-        <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">
+                      Another action
+                    </Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">
+                      Something else
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </Typography>
               <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
                 <Row>
-                 
                   <Col>
                     <FormLabel className="fw-bold">Name</FormLabel>
                     <FormControl type="text" />
@@ -153,41 +167,36 @@ const ProductList = () => {
                 <FormLabel className="fw-bold mt-2">Description</FormLabel>
                 <FormControl type="text" />
 
-                 
-
-                    
                 <Row className="mt-2">
                   <Col>
                     <FormLabel className="fw-bold">Price</FormLabel>
                     <FormControl type="number" />
-                    </Col>
+                  </Col>
                   <Col>
                     <FormLabel className="fw-bold">Quantity</FormLabel>
                     <FormControl type="number" />
-                    </Col>
-                     </Row>
+                  </Col>
+                </Row>
 
-                    <FormLabel className="mt-2 fw-bold">Status</FormLabel>
-                    <Form.Select className="fw-bold " >
-                            <option>-----</option>
-                              <option value="1">Active</option>
-                                   <option value="2">In Active</option>
-                                          
-                                       </Form.Select>
-                
-                
-                <Row className="mt-3">
-                  <Col>
+                <FormLabel className="mt-2 fw-bold">Status</FormLabel>
+                <Form.Select className="fw-bold ">
+                  <option>-----</option>
+                  <option value="1">Active</option>
+                  <option value="2">In Active</option>
+                </Form.Select>
+
+                <div className="mt-5 d-flex align-items-center justify-content-between">
+                  <div>
                     <Button variant="secondary" onClick={handleCloseModel}>
                       Close
                     </Button>
-                  </Col>
-                  <Col>
+                  </div>
+                  <div>
                     <Button variant="primary" onClick={handleEditModel}>
                       Save Changes
                     </Button>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Typography>
             </Box>
           </Modal>
@@ -208,24 +217,24 @@ const ProductList = () => {
                 Delete
               </Typography>
               <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                Are you sure you want to remove this item
-                <Row className="mt-3">
-                  <Col>
+                Are you sure you want to Delete this Product
+                <div className="mt-5 d-flex align-items-center justify-content-between">
+                  <div>
                     <Button variant="secondary" onClick={handleRemoveModel}>
                       Yes
                     </Button>
-                  </Col>
-                  <Col>
-                    <Button variant="primary" onClick={handleRemoveModel}>
+                  </div>
+                  <div>
+                    <Button variant="primary" onClick={handleDeleteProduct}>
                       No
                     </Button>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Typography>
             </Box>
           </Modal>
 
-          <Modal
+          {/* <Modal
             keepMounted
             open={CancelModel}
             onClose={handleModel}
@@ -256,7 +265,7 @@ const ProductList = () => {
                 </Row>
               </Typography>
             </Box>
-          </Modal>
+          </Modal> */}
 
           <Modal
             keepMounted
@@ -271,556 +280,250 @@ const ProductList = () => {
                 variant="h6"
                 component="h2"
               >
-                 Add New Product
+                Add New Product
               </Typography>
               <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
                 <Row>
-                 
                   <Col>
                     <FormLabel className="fw-bold">Name</FormLabel>
-                    <FormControl type="text" />
+                    <FormControl
+                      type="text"
+                      value={productName}
+                      onChange={(event) => setProductName(event.target.value)}
+                    />
                   </Col>
                 </Row>
                 <FormLabel className="fw-bold mt-2">Images</FormLabel>
-                <FormControl type="file" multiple />
+                <FormControl
+                  type="file"
+                  multiple
+                  // value={productImages}
+                  onChange={(event) => setproductImages(event.target.files)}
+                />
                 <FormLabel className="fw-bold mt-2">Description</FormLabel>
-                <FormControl type="text" />
+                <FormControl
+                  type="text"
+                  value={productDescription}
+                  onChange={(event) =>
+                    setproductDescription(event.target.value)
+                  }
+                />
 
-                  <Row className="mt-2">
+                <Row className="mt-2">
                   <Col>
                     <FormLabel className="fw-bold">Price</FormLabel>
-                    <FormControl type="number" />
-                    </Col>
+                    <FormControl
+                      type="number"
+                      value={productPrice}
+                      onChange={(event) => setproductPrice(event.target.value)}
+                    />
+                  </Col>
                   <Col>
                     <FormLabel className="fw-bold">Quantity</FormLabel>
-                    <FormControl type="number" />
-                    </Col>
-                     </Row>
-                    <FormLabel className="mt-2 fw-bold">Status</FormLabel>
-                    <Form.Select className="fw-bold " >
-                            <option>-----</option>
-                              <option value="1">Active</option>
-                                   <option value="2">In Active</option>
-                         </Form.Select>                 
-                 
-                
-                <Row className="mt-3">
-                  <Col>
+                    <FormControl
+                      type="number"
+                      value={productQuantity}
+                      onChange={(event) =>
+                        setproductQuantity(event.target.value)
+                      }
+                    />
+                  </Col>
+                </Row>
+                <FormLabel className="mt-2 fw-bold">Status</FormLabel>
+                <Form.Select
+                  className="fw-bold "
+                  value={productStatus}
+                  onChange={(event) => setproductStatus(event.target.value)}
+                >
+                  <option>-----</option>
+                  <option value="1">Active</option>
+                  <option value="2">In Active</option>
+                </Form.Select>
+
+                <div className="mt-5 d-flex justify-content-between align-items-center ">
+                  <div>
                     <Button variant="secondary" onClick={handleCloseModel1}>
                       Cancel
                     </Button>
-                  </Col>
-                  <Col>
+                  </div>
+                  <div>
                     <Button variant="primary" onClick={handleAddModel}>
                       Add
                     </Button>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Typography>
             </Box>
           </Modal>
 
           <Modal
-              keepMounted
-              open={AddModel}
-              onClose={handleAddiModel}
-              aria-labelledby="keep-mounted-modal-title"
-              aria-describedby="keep-mounted-modal-description"
-            >
-              <Box sx={style}>
-                <Typography
-                  id="keep-mounted-modal-title"
-                  variant="h6"
-                  component="h2"
-                >
-                
-                </Typography>
-                <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                 
-                  Are you want to add the Product?
+            keepMounted
+            open={AddModel}
+            onClose={handleAddiModel}
+            aria-labelledby="keep-mounted-modal-title"
+            aria-describedby="keep-mounted-modal-description"
+          >
+            <Box sx={style}>
+              <Typography
+                id="keep-mounted-modal-title"
+                variant="h6"
+                component="h2"
+              ></Typography>
+              <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                Are you sure want to add the Product?
+                <div className="mt-5 d-flex align-items-center justify-content-between">
+                  <div>
+                    <Button variant="primary" onClick={handleAddNewProduct}>
+                      yes
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setAddModel(false)}
+                    >
+                      No
+                    </Button>
+                  </div>
+                </div>
+              </Typography>
+            </Box>
+          </Modal>
 
-                  <Row className="mt-3">
-                    <Col>
-                    <Button variant="primary" onClick={handleAddiModel}>
-                        yes
-                      </Button> 
-                    </Col>
-                    <Col>
-                    <Button variant="secondary" onClick={()=>setAddModel(false)}>
-                        No
-                      </Button>
-                      
-                    </Col>
-                  </Row>
-                </Typography>
-              </Box>
-            </Modal>
-           
-            <Modal
-              keepMounted
-              open={EditModel}
-              onClose={handleEditiModel}
-              aria-labelledby="keep-mounted-modal-title"
-              aria-describedby="keep-mounted-modal-description"
-            >
-              <Box sx={style}>
-                <Typography
-                  id="keep-mounted-modal-title"
-                  variant="h6"
-                  component="h2"
-                >
-                
-                </Typography>
-                <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                 
-                  Are you want to Edit the Product?
-
-                  <Row className="mt-3">
-                    <Col>
-                    <Button variant="primary" onClick={handleEditiModel}>
-                        yes
-                      </Button> 
-                    </Col>
-                    <Col>
-                    <Button variant="secondary" onClick={()=>setEditModel(false)}>
-                        No
-                      </Button>
-                      
-                    </Col>
-                  </Row>
-                </Typography>
-              </Box>
-            </Modal>
-
+          <Modal
+            keepMounted
+            open={EditModel}
+            onClose={handleEditiModel}
+            aria-labelledby="keep-mounted-modal-title"
+            aria-describedby="keep-mounted-modal-description"
+          >
+            <Box sx={style}>
+              <Typography
+                id="keep-mounted-modal-title"
+                variant="h6"
+                component="h2"
+              ></Typography>
+              <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                Are you want to Edit the Product?
+                <div className="mt-5 d-flex align-items-center justify-content-between">
+                  <div>
+                    <Button variant="primary" onClick={handleEditProduct}>
+                      yes
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setEditModel(false)}
+                    >
+                      No
+                    </Button>
+                  </div>
+                </div>
+              </Typography>
+            </Box>
+          </Modal>
 
           <div style={{ overflowX: "hidden" }}>
             <div className="d-flex justify-content-between">
               <Form className="d-flex">
-                    <Form.Control placeholder="Search" className="w-50"  />
-                    <Button type="Search Orders" className="mx-2">
-                      <BiSearch />
-                      Search
-                    </Button>
+                <Form.Control placeholder="Search" className="w-50" />
+                <Button type="Search Orders" className="mx-2">
+                  <BiSearch />
+                  Search
+                </Button>
               </Form>
               <Button onClick={handleOpenModel1}>Add Product</Button>
             </div>
 
             <div>
-              
-              
+              <Table striped bordered hover variant="" className="mt-3 ">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Images</th>
+                    <th>Caption</th>
+                    <th>Total Quantity</th>
+                    <th>Current Quantity</th>
+                    <th>Sold Quantity</th>
 
-                
-                  <Table
-                
-                    striped
-                    bordered
-                    hover
-                    
-                    variant=""
-                    className="mt-3 "
-                  
-                  >
-                    <thead>
-                      <tr>
-                        <th>Id</th>
-                        <th>Title</th>
-                        <th>
-                         Images
-                        </th>
-                        <th>Caption</th>
-                        <th>Total Quantity</th>
-                        <th>Current Quantity</th>
-                        <th>Sold Quantity</th>
+                    <th>Price</th>
 
-                        <th>Price</th>
+                    <th>Status</th>
 
-                        <th>Status</th>
-                     
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>food</td>
-                        <td> <img
-                            src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
-                            style={{ width: 50, height: 50,borderRadius:50 }}
-                          /></td>
-                        <td>photo</td>
-                        <td>600</td>
-                        <td>400</td>
-                        <td>200</td>
-                        <td>Rs.600</td>
-                        <td>active</td>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>food</td>
+                    <td>
+                      {" "}
+                      <img
+                        src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        style={{ width: 50, height: 50, borderRadius: 50 }}
+                      />
+                    </td>
+                    <td>photo</td>
+                    <td>600</td>
+                    <td>400</td>
+                    <td>200</td>
+                    <td>Rs.600</td>
+                    <td>active</td>
+
+                    <td>
+                      <div>
+                        <IconButton
+                          aria-label="more"
+                          id="long-button"
+                          aria-controls={open ? "long-menu" : undefined}
+                          aria-expanded={open ? "true" : undefined}
+                          aria-haspopup="true"
+                          onClick={handleClick1}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          id="long-menu"
+                          MenuListProps={{
+                            "aria-labelledby": "long-button",
+                          }}
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleClose4}
+                          PaperProps={{
+                            style: {
+                              maxHeight: ITEM_HEIGHT * 4.5,
+                              width: "20ch",
+                            },
+                          }}
+                        >
+                          <MenuItem key="Edit" onClick={handleOpenModel}>
+                            Edit
+                          </MenuItem>
+                          <MenuItem key="Remove" onClick={handleDeleteModel}>
+                            Delete{" "}
+                            {/* <RiDeleteBinLine
+                              style={{
+                                fontSize: 28,
+                                color: "red",
+                                paddingLeft: 10,
+                              }}
+                            /> */}
+                          </MenuItem>
                         
-                        <td>
-                          <div>
-                            <IconButton
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={open ? "long-menu" : undefined}
-                              aria-expanded={open ? "true" : undefined}
-                              aria-haspopup="true"
-                              onClick={handleClick1}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                              id="long-menu"
-                              MenuListProps={{
-                                "aria-labelledby": "long-button",
-                              }}
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose4}
-                              PaperProps={{
-                                style: {
-                                  maxHeight: ITEM_HEIGHT * 4.5,
-                                  width: "20ch",
-                                },
-                              }}
-                            >
-                              <MenuItem key="Edit" onClick={handleOpenModel}>
-                                Edit
-                              </MenuItem>
-                              <MenuItem
-                                key="Remove"
-                                onClick={handleDeleteModel}
-                              >
-                                Delete{" "}
-                                <RiDeleteBinLine
-                                  style={{
-                                    fontSize: 28,
-                                    color: "red",
-                                    paddingLeft: 10,
-                                  }}
-                                />
-                              </MenuItem>
-                              <MenuItem
-                                key="Cancel"
-                                onClick={handleCancelModel}
-                              >
-                                Cancel Order
-                              </MenuItem>
-                            </Menu>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr></tr>
-                      <tr></tr>
-                    </tbody>
-                  </Table>
-                
-                <div className="d-md-none d-block">
-                  <Row>
-                    <Col lg={3}>
-                      <Card>
-                        <Card.Title className="d-flex justify-content-end">
-                          <div>
-                            <IconButton
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={open ? "long-menu" : undefined}
-                              aria-expanded={open ? "true" : undefined}
-                              aria-haspopup="true"
-                              onClick={handleClick1}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                              id="long-menu"
-                              MenuListProps={{
-                                "aria-labelledby": "long-button",
-                              }}
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose4}
-                              PaperProps={{
-                                style: {
-                                  maxHeight: ITEM_HEIGHT * 4.5,
-                                  width: "20ch",
-                                },
-                              }}
-                            >
-                              <MenuItem key="Edit" onClick={handleOpenModel}>
-                                Edit
-                              </MenuItem>
-                              <MenuItem
-                                key="Remove"
-                                onClick={handleDeleteModel}
-                              >
-                                Delete{" "}
-                                <RiDeleteBinLine
-                                  style={{
-                                    fontSize: 28,
-                                    color: "red",
-                                    paddingLeft: 10,
-                                  }}
-                                />
-                              </MenuItem>
-                              <MenuItem
-                                key="Cancel"
-                                onClick={handleCancelModel}
-                              >
-                                Cancel Order
-                              </MenuItem>
-                            </Menu>
-                          </div>
-                        </Card.Title>
-                        <Card.Body>
-                          <div className=" d-flex justify-content-center">
-                            <img
-                              src="https://www.pngmart.com/files/15/Apple-iPhone-12-PNG-Transparent-HD-Photo.png"
-                              style={{ width: 100, marginTop: -40 }}
-                            />
-                          </div>
+                        </Menu>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr></tr>
+                  <tr></tr>
+                </tbody>
+              </Table>
 
-                          <p className="fw-bold text-secondary text-center">
-                            APPLE iphone 12(128gb)
-                          </p>
-
-                          <p className="text-primary " style={{ fontSize: 14 }}>
-                            Combo Pack of 2 Sports Shoes
-                          </p>
-                          <p className="fw-bold " style={{ fontSize: 16 }}>
-                            ₹55000 <strike>₹70000</strike>
-                          </p>
-                          <p style={{ color: "grey" }}>Size:6,7,8,9</p>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                    <Col lg={3}>
-                      <Card>
-                        <Card.Title className="d-flex justify-content-end">
-                          <div>
-                            <IconButton
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={open ? "long-menu" : undefined}
-                              aria-expanded={open ? "true" : undefined}
-                              aria-haspopup="true"
-                              onClick={handleClick1}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                              id="long-menu"
-                              MenuListProps={{
-                                "aria-labelledby": "long-button",
-                              }}
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose4}
-                              PaperProps={{
-                                style: {
-                                  maxHeight: ITEM_HEIGHT * 4.5,
-                                  width: "20ch",
-                                },
-                              }}
-                            >
-                              <MenuItem key="Edit" onClick={handleOpenModel}>
-                                Edit
-                              </MenuItem>
-                              <MenuItem
-                                key="Remove"
-                                onClick={handleDeleteModel}
-                              >
-                                Delete{" "}
-                                <RiDeleteBinLine
-                                  style={{
-                                    fontSize: 28,
-                                    color: "red",
-                                    paddingLeft: 10,
-                                  }}
-                                />
-                              </MenuItem>
-                              <MenuItem
-                                key="Cancel"
-                                onClick={handleCancelModel}
-                              >
-                                Cancel Order
-                              </MenuItem>
-                            </Menu>
-                          </div>
-                        </Card.Title>
-                        <Card.Body>
-                          <div className=" d-flex justify-content-center">
-                            <img
-                              src="https://www.pngmart.com/files/15/Apple-iPhone-12-PNG-Transparent-HD-Photo.png"
-                              style={{ width: 100, marginTop: -40 }}
-                            />
-                          </div>
-
-                          <p className="fw-bold text-secondary text-center">
-                            APPLE iphone 12(128gb)
-                          </p>
-
-                          <p className="text-primary " style={{ fontSize: 14 }}>
-                            Combo Pack of 2 Sports Shoes
-                          </p>
-                          <p className="fw-bold " style={{ fontSize: 16 }}>
-                            ₹55000 <strike>₹70000</strike>
-                          </p>
-                          <p style={{ color: "grey" }}>Size:6,7,8,9</p>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                    <Col lg={3}>
-                      <Card>
-                        <Card.Title className="d-flex justify-content-end">
-                          <div>
-                            <IconButton
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={open ? "long-menu" : undefined}
-                              aria-expanded={open ? "true" : undefined}
-                              aria-haspopup="true"
-                              onClick={handleClick1}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                              id="long-menu"
-                              MenuListProps={{
-                                "aria-labelledby": "long-button",
-                              }}
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose4}
-                              PaperProps={{
-                                style: {
-                                  maxHeight: ITEM_HEIGHT * 4.5,
-                                  width: "20ch",
-                                },
-                              }}
-                            >
-                              <MenuItem key="Edit" onClick={handleOpenModel}>
-                                Edit
-                              </MenuItem>
-                              <MenuItem
-                                key="Remove"
-                                onClick={handleDeleteModel}
-                              >
-                                Delete{" "}
-                                <RiDeleteBinLine
-                                  style={{
-                                    fontSize: 28,
-                                    color: "red",
-                                    paddingLeft: 10,
-                                  }}
-                                />
-                              </MenuItem>
-                              <MenuItem
-                                key="Cancel"
-                                onClick={handleCancelModel}
-                              >
-                                Cancel Order
-                              </MenuItem>
-                            </Menu>
-                          </div>
-                        </Card.Title>
-                        <Card.Body>
-                          <div className=" d-flex justify-content-center">
-                            <img
-                              src="https://www.pngmart.com/files/15/Apple-iPhone-12-PNG-Transparent-HD-Photo.png"
-                              style={{ width: 100, marginTop: -40 }}
-                            />
-                          </div>
-
-                          <p className="fw-bold text-secondary text-center">
-                            APPLE iphone 12(128gb)
-                          </p>
-
-                          <p className="text-primary " style={{ fontSize: 14 }}>
-                            Combo Pack of 2 Sports Shoes
-                          </p>
-                          <p className="fw-bold " style={{ fontSize: 16 }}>
-                            ₹55000 <strike>₹70000</strike>
-                          </p>
-                          <p style={{ color: "grey" }}>Size:6,7,8,9</p>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                    <Col lg={3}>
-                      <Card>
-                        <Card.Title className="d-flex justify-content-end">
-                          <div>
-                            <IconButton
-                              aria-label="more"
-                              id="long-button"
-                              aria-controls={open ? "long-menu" : undefined}
-                              aria-expanded={open ? "true" : undefined}
-                              aria-haspopup="true"
-                              onClick={handleClick1}
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                              id="long-menu"
-                              MenuListProps={{
-                                "aria-labelledby": "long-button",
-                              }}
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose4}
-                              PaperProps={{
-                                style: {
-                                  maxHeight: ITEM_HEIGHT * 4.5,
-                                  width: "20ch",
-                                },
-                              }}
-                            >
-                              <MenuItem key="Edit" onClick={handleOpenModel}>
-                                Edit
-                              </MenuItem>
-                              <MenuItem
-                                key="Remove"
-                                onClick={handleDeleteModel}
-                              >
-                                Delete{" "}
-                                <RiDeleteBinLine
-                                  style={{
-                                    fontSize: 28,
-                                    color: "red",
-                                    paddingLeft: 10,
-                                  }}
-                                />
-                              </MenuItem>
-                              <MenuItem
-                                key="Cancel"
-                                onClick={handleCancelModel}
-                              >
-                                Cancel Order
-                              </MenuItem>
-                            </Menu>
-                          </div>
-                        </Card.Title>
-                        <Card.Body>
-                          <div className=" d-flex justify-content-center">
-                            <img
-                              src="https://www.pngmart.com/files/15/Apple-iPhone-12-PNG-Transparent-HD-Photo.png"
-                              style={{ width: 100, marginTop: -40 }}
-                            />
-                          </div>
-
-                          <p className="fw-bold text-secondary text-center">
-                            APPLE iphone 12(128gb)
-                          </p>
-
-                          <p className="text-primary " style={{ fontSize: 14 }}>
-                            Combo Pack of 2 Sports Shoes
-                          </p>
-                          <p className="fw-bold " style={{ fontSize: 16 }}>
-                            ₹55000 <strike>₹70000</strike>
-                          </p>
-                          <p style={{ color: "grey" }}>Size:6,7,8,9</p>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                </div>
-              
+             
             </div>
           </div>
         </Box>

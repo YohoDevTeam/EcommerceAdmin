@@ -229,7 +229,7 @@ export default function NavBar() {
               <img
                 src={Logo}
                 // width={120}
-                 height={30}
+                height={30}
                 style={{ marginRight: 10 }}
               />
 
@@ -242,9 +242,7 @@ export default function NavBar() {
                   fontWeight: "bold",
                   color: "black",
                 }}
-              >
-                
-              </Typography>
+              ></Typography>
             </div>
           </div>
           {/* <Search>
@@ -425,11 +423,14 @@ export default function NavBar() {
                 <MenuItem onClick={handleClose}>
                   <Avatar /> Profile
                 </MenuItem>
-               
+
                 <Divider />
-                
-             
-                <MenuItem onClick={handleClose}>
+
+                <MenuItem
+                  onClick={() => {
+                    localStorage.removeItem("name");
+                  }}
+                >
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>

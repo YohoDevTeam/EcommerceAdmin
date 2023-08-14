@@ -35,6 +35,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import CategoryIcon from '@mui/icons-material/Category';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -179,17 +180,12 @@ export default function SideBar() {
               >
                 {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
                 <DashboardIcon
-                  style={{
-                    color: route === "/" ? Color.COLORS.primary : "grey",
-                  }}
+                 
                 />
               </ListItemIcon>
               <ListItemText
                 primary="Overview"
-                sx={{
-                  opacity: open ? 1 : 0,
-                  color: route === "/" ? Color.COLORS.primary : "grey",
-                }}
+                sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>
           </ListItem>
@@ -315,10 +311,7 @@ export default function SideBar() {
               </ListItemIcon>
               <ListItemText
                 primary="Orders"
-                sx={{
-                  opacity: open ? 1 : 0,
-                  color: route === "Companies" ? Color.COLORS.primary : "grey",
-                }}
+                sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>
           </ListItem>

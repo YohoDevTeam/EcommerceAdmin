@@ -29,15 +29,40 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  // border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
+
 const Category = () => {
+  
+  // Hooks
+  const [categoryImage, setCategoryImage] = useState();
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryStatus, setCategoryStatus] = useState();
+
+
+  const handleAddCategory = () => {
+    const data = {
+      name: categoryName,
+      image: categoryImage,
+      status: categoryStatus,
+    };
+    console.log(data);
+    handleCloseModel2();
+  };
+
+  const handleDeleteCategory = ()=>{
+
+  }
+
+  const handleEditCategory = ()=>{
+
+  }
+
+
   const ITEM_HEIGHT = 48;
-
-  const status = " InActive"
-
+  const status = " InActive";
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -61,7 +86,7 @@ const Category = () => {
   };
   const handleCloseModel2 = () => {
     setOpenModel2(false);
-    handleCloseModel1()
+    handleCloseModel1();
   };
 
   const [openModel, setOpenModel] = React.useState(false);
@@ -85,17 +110,15 @@ const Category = () => {
   };
   const handleModel = () => setCancelModel(false);
 
-
   const [EditModel, setEditModel] = React.useState(false);
   const handleEditModel = () => {
     setEditModel(true);
     handleClose();
   };
-  const handleEditiModel = () =>{
-     setEditModel(false);
-       handleCloseModel();
-  }
-
+  const handleEditiModel = () => {
+    setEditModel(false);
+    handleCloseModel();
+  };
 
   return (
     <>
@@ -119,31 +142,31 @@ const Category = () => {
               >
                 Edit Category
               </Typography>
-              <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+              <Typography id="keep-mounted-modal-description" sx={{ mt: 3 }}>
                 <Form.Label className="fw-bold">Name</Form.Label>
                 <FormControl type="text" />
-                <Form.Label className="fw-bold mt-2">Images</Form.Label>
+                <Form.Label className="fw-bold mt-3">Images</Form.Label>
                 <FormControl type="file" multiple />
 
-                <h6 className="mt-2 fw-bold">Status</h6>
+                <h6 className="mt-3 fw-bold">Status</h6>
                 <Form.Select className="fw-bold ">
                   <option>-----</option>
                   <option value="1">Active</option>
                   <option value="2">In Active</option>
                 </Form.Select>
 
-                <Row className="mt-3">
-                  <Col>
+                <div className="mt-5 d-flex align-items-center justify-content-between">
+                  <div>
                     <Button variant="secondary" onClick={handleCloseModel}>
                       Close
                     </Button>
-                  </Col>
-                  <Col>
+                  </div>
+                  <diiv>
                     <Button variant="primary" onClick={handleEditModel}>
                       Save Changes
                     </Button>
-                  </Col>
-                </Row>
+                  </diiv>
+                </div>
               </Typography>
             </Box>
           </Modal>
@@ -165,23 +188,23 @@ const Category = () => {
               </Typography>
               <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
                 Are you sure you want to remove this item
-                <Row className="mt-3">
-                  <Col>
-                    <Button variant="secondary" onClick={handleRemoveModel}>
+                <div className="mt-3 d-flex justify-content-between align-items-center">
+                  <div>
+                    <Button variant="secondary" onClick={handleDeleteCategory}>
                       Yes
                     </Button>
-                  </Col>
-                  <Col>
+                  </div>
+                  <div>
                     <Button variant="primary" onClick={handleRemoveModel}>
                       No
                     </Button>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Typography>
             </Box>
           </Modal>
 
-          <Modal
+          {/* <Modal
             keepMounted
             open={CancelModel}
             onClose={handleModel}
@@ -212,21 +235,21 @@ const Category = () => {
                   </Col>
                 </Row>
 
-                <Row className="mt-3">
-                  <Col>
+                <div className="mt-3 justify-content-between  align-items-center">
+                  <div>
                     <Button variant="secondary" onClick={handleModel}>
                       Yes
                     </Button>
-                  </Col>
-                  <Col>
+                  </div>
+                  <div>
                     <Button variant="primary" onClick={handleModel}>
                       No
                     </Button>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Typography>
             </Box>
-          </Modal>
+          </Modal> */}
 
           <Modal
             keepMounted
@@ -245,21 +268,36 @@ const Category = () => {
               </Typography>
               <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
                 <Form.Label className="fw-bold">Name</Form.Label>
-                <FormControl type="text" />
-                <Form.Label className="fw-bold mt-2">Images</Form.Label>
-                <FormControl type="file" multiple />
-                <Row className="mt-3">
-                  <Col>
+                <FormControl
+                  type="text"
+                  value={categoryName}
+                  onChange={(text) => setCategoryName(text.target.value)}
+                />
+                <Form.Label className="fw-bold mt-3">Image</Form.Label>
+                <FormControl
+                  type="file"
+                  onChange={(event) => setCategoryImage(event.target.files[0])}
+                />
+                <h6 className="mt-3 fw-bold">Status</h6>
+                <Form.Select
+                  className="fw-bold "
+                  onChange={(evet) => setCategoryStatus(evet.target.value)}
+                >
+                  <option value="Active">Active</option>
+                  <option value="InActive">In Active</option>
+                </Form.Select>
+                <div className="mt-5 d-flex justify-content-between align-items-center">
+                  <div>
                     <Button variant="secondary" onClick={handleCloseModel1}>
                       Cancel
                     </Button>
-                  </Col>
-                  <Col>
+                  </div>
+                  <div>
                     <Button variant="primary" onClick={handleOpenModel2}>
                       Add
                     </Button>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Typography>
             </Box>
           </Modal>
@@ -277,60 +315,63 @@ const Category = () => {
                 variant="h6"
                 component="h2"
               ></Typography>
-              <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                Are you want to add the category?
-                <Row className="mt-3">
-                  <Col>
-                    <Button variant="secondary" onClick={handleCloseModel2}>
+              <Typography
+                id="keep-mounted-modal-description"
+                sx={{ mt: 2, fontWeight: "bold" }}
+              >
+                Are you sure want to add the category?
+                <div className="mt-5 d-flex justify-content-between align-items-center">
+                  <div>
+                    <Button variant="secondary" onClick={handleAddCategory}>
                       Yes
                     </Button>
-                  </Col>
-                  <Col>
-                    <Button variant="primary" onClick={()=>setOpenModel2(false)}>
+                  </div>
+                  <div>
+                    <Button
+                      variant="primary"
+                      onClick={() => setOpenModel2(false)}
+                    >
                       No
                     </Button>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Typography>
             </Box>
           </Modal>
 
           <Modal
-              keepMounted
-              open={EditModel}
-              onClose={handleEditiModel}
-              aria-labelledby="keep-mounted-modal-title"
-              aria-describedby="keep-mounted-modal-description"
-            >
-              <Box sx={style}>
-                <Typography
-                  id="keep-mounted-modal-title"
-                  variant="h6"
-                  component="h2"
-                >
-                
-                </Typography>
-                <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-                 
-                  Are you want to Edit the Product?
-
-                  <Row className="mt-3">
-                    <Col>
-                    <Button variant="primary" onClick={handleEditiModel}>
-                        yes
-                      </Button> 
-                    </Col>
-                    <Col>
-                    <Button variant="secondary" onClick={()=>setEditModel(false)}>
-                        No
-                      </Button>
-                      
-                    </Col>
-                  </Row>
-                </Typography>
-              </Box>
-            </Modal>
-
+            keepMounted
+            open={EditModel}
+            onClose={handleEditiModel}
+            aria-labelledby="keep-mounted-modal-title"
+            aria-describedby="keep-mounted-modal-description"
+          >
+            <Box sx={style}>
+              <Typography
+                id="keep-mounted-modal-title"
+                variant="h6"
+                component="h2"
+              ></Typography>
+              <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+                Are you sure want to Edit the Product?
+                <div className="mt-5 d-flex align=items-center justify-content-between">
+                  <div>
+                    <Button variant="primary" onClick={handleEditCategory}>
+                      yes
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setEditModel(false)}
+                    >
+                      No
+                    </Button>
+                  </div>
+                </div>
+              </Typography>
+            </Box>
+          </Modal>
 
           <div className="d-flex justify-content-between">
             <Form className="d-flex">
@@ -345,12 +386,6 @@ const Category = () => {
             </Form>
             <Button onClick={handleOpenModel1}>Add Category</Button>
           </div>
-
-          
-
-        
- 
- 
 
           <Table striped bordered hover variant="" className="mt-4" responsive>
             <thead>
@@ -374,7 +409,9 @@ const Category = () => {
                   />
                 </td>
 
-                <td style={{color:status=="Active"?"green":"red"}}>{status}</td>
+                <td style={{ color: status == "Active" ? "green" : "red" }}>
+                  {status}
+                </td>
 
                 <td>
                   <div>
