@@ -11,7 +11,7 @@ import Button from "react-bootstrap/Button";
 
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -21,6 +21,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { AiFillDownCircle } from "react-icons/ai";
 import { BiSearch } from "react-icons/bi";
+import axios from "axios";
 
 const style = {
   position: "absolute",
@@ -35,38 +36,127 @@ const style = {
 };
 
 const Category = () => {
-  
   // Hooks
   const [categoryImage, setCategoryImage] = useState();
   const [categoryName, setCategoryName] = useState("");
+  const [selectedCategory, setselectedCategory] = useState();
+  const [selectedCategoryImage, setselectedCategoryImage] = useState();
+  const [editedCategoryName, setEditedCategoryName] = useState();
+  const [editedCategoryImage, setEditedCategoryImage] = useState();
   const [categoryStatus, setCategoryStatus] = useState();
 
+  const [categories, setCategories] = useState([]);
+  const API_URL = "http://192.168.29.102:8000/api/admin/categories/create";
 
-  const handleAddCategory = () => {
-    const data = {
-      name: categoryName,
-      image: categoryImage,
-      status: categoryStatus,
-    };
-    console.log(data);
-    handleCloseModel2();
+  useEffect(() => {
+    getAllCategory();
+  }, []);
+
+  const getAllCategory = async () => {
+    const res = await axios.get(
+      `http://192.168.29.102:8000/api/admin/categories/read`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    // console.log(res);
+    setCategories(res.data.data);
+  };
+  // console.log("CTTEGORIES :", categories);
+  const token = localStorage.getItem("token");
+  console.log(selectedCategory);
+
+  const handleAddCategory = async () => {
+    const form = new FormData();
+    form.append("category_name", categoryName);
+    form.append("category_image", categoryImage);
+
+    const res = await axios.post(
+      `http://192.168.29.102:8000/api/admin/categories/create`,
+      form,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res);
   };
 
-  const handleDeleteCategory = ()=>{
+  const handleDeleteCategory = async () => {
+    const data = {
+      category_id: selectedCategory?.category_id,
+    };
+ 
+    let config = {
+      method: "delete",
+      url: "http://192.168.29.102:8000/api/admin/categories/delete",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      data: data,
+    };
+    axios
+      .request(config)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    getAllCategory();
+  };
 
-  }
+  const handleEditCategory = async () => {
+    // const res = await axios.delete(
+    //   `http://192.168.29.102:8000/api/admin/categories/delete`,
+    //   {
+    //     category_id: id,
+    //     category_name: name,
+    //     category_image: image,
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: "Bearer " + token,
+    //     },
+    //   }
+    // );
+    const form = new FormData();
+    form.append("category_name", editedCategoryName);
+    form.append("category_id", selectedCategory?.category_id);
+    form.append("category_image", editedCategoryImage);
+    // form.append("my_file", fileInput.files[0]);
+    // const res = await axios.postForm(process.env.PUBLIC_ADMIN_URL, data);
 
-  const handleEditCategory = ()=>{
+    const res = await axios.post(
+      `http://192.168.29.102:8000/api/admin/categories/update`,
+      form,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res);
+  };
 
-  }
+  const handleOptions = (event, item) => {
+    setAnchorEl(event.currentTarget);
 
+    console.log(item);
+    console.log(event.currentTarget);
+  };
 
   const ITEM_HEIGHT = 48;
   const status = " InActive";
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event, item) => {
     setAnchorEl(event.currentTarget);
+    setselectedCategory(item);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -113,6 +203,7 @@ const Category = () => {
   const [EditModel, setEditModel] = React.useState(false);
   const handleEditModel = () => {
     setEditModel(true);
+
     handleClose();
   };
   const handleEditiModel = () => {
@@ -144,9 +235,20 @@ const Category = () => {
               </Typography>
               <Typography id="keep-mounted-modal-description" sx={{ mt: 3 }}>
                 <Form.Label className="fw-bold">Name</Form.Label>
-                <FormControl type="text" />
+                <FormControl
+                  type="text"
+                  placeholder={selectedCategory?.category_name}
+                  onChange={(event) =>
+                    setEditedCategoryName(event.target.value)
+                  }
+                />
                 <Form.Label className="fw-bold mt-3">Images</Form.Label>
-                <FormControl type="file" multiple />
+                <FormControl
+                  type="file"
+                  onChange={(event) =>
+                    setEditedCategoryImage(event.target.files[0])
+                  }
+                />
 
                 <h6 className="mt-3 fw-bold">Status</h6>
                 <Form.Select className="fw-bold ">
@@ -399,59 +501,70 @@ const Category = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Arun</td>
-                <td>
-                  <img
-                    src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    style={{ width: 50, height: 50, borderRadius: 50 }}
-                  />
-                </td>
+              {categories[0]?.map((item, index) => (
+                <tr>
+                  <td>{item.category_id}</td>
+                  <td>{item.category_name}</td>
+                  <td>
+                    <img
+                      src={`http://192.168.29.102:8000/${item.image_path}`}
+                      style={{ width: 50, height: 50, borderRadius: 50 }}
+                    />
+                  </td>
 
-                <td style={{ color: status == "Active" ? "green" : "red" }}>
-                  {status}
-                </td>
+                  <td style={{ color: status == "Active" ? "green" : "red" }}>
+                    {item.isActive == "yes" ? "Active" : "InActive"}
+                  </td>
 
-                <td>
-                  <div>
-                    <IconButton
-                      aria-label="more"
-                      id="long-button"
-                      aria-controls={open ? "long-menu" : undefined}
-                      aria-expanded={open ? "true" : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id="long-menu"
-                      MenuListProps={{
-                        "aria-labelledby": "long-button",
-                      }}
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      PaperProps={{
-                        style: {
-                          maxHeight: ITEM_HEIGHT * 4.5,
-                          width: "20ch",
-                        },
-                      }}
-                    >
-                      <MenuItem key="edit" onClick={handleOpenModel}>
-                        Edit
-                      </MenuItem>
-                      <MenuItem key="remove" onClick={handleDeleteModel}>
-                        Remove
-                      </MenuItem>
-                    </Menu>
-                  </div>
-                </td>
-              </tr>
-              <tr></tr>
-              <tr></tr>
+                  <td>
+                    <div>
+                      <IconButton
+                        aria-label="more"
+                        id="long-button"
+                        aria-controls={open ? "long-menu" : undefined}
+                        aria-expanded={open ? "true" : undefined}
+                        aria-haspopup="true"
+                        onClick={
+                          // handleClick
+                          (event) => {
+                            handleClick(event, item);
+                            // handleOptions(item, event);
+                          }
+                        }
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        id="long-menu"
+                        MenuListProps={{
+                          "aria-labelledby": "long-button",
+                        }}
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        PaperProps={{
+                          style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: "20ch",
+                          },
+                        }}
+                      >
+                        <MenuItem
+                          key="edit"
+                          onClick={() => {
+                            handleOpenModel();
+                          }}
+                        >
+                          Edit
+                        </MenuItem>
+                        <MenuItem key="remove" onClick={handleDeleteModel}>
+                          Remove
+                        </MenuItem>
+                      </Menu>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Box>

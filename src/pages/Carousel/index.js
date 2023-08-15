@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import SideBar from "../../components/SideBar";
 import NavBar from "../../components/NavBar";
@@ -23,20 +23,114 @@ import Typography from "@mui/material/Typography";
 import Dropdown from "react-bootstrap/Dropdown";
 import { BiSearch } from "react-icons/bi";
 import { CarCrash } from "@mui/icons-material";
+import axios from "axios";
 
 const Carousel = () => {
   //Hooks
 
   const [carouselName, setCarouselName] = useState("");
-  const [carouselImage, setCarouselImage] = useState("");
+  const [carouselImage, setCarouselImage] = useState();
   const [carouselDescription, setCarouselDescription] = useState("");
   const [carouselStatus, setCarouselStatus] = useState("");
+  const [carousel, setCarousel] = useState([]);
+  const [selectedCarousel, setSelectedCarousel] = useState();
+  const [editedCarouselName, setEditedCarouselName] = useState();
+  const [editedCarouselImage, setEditedCarouselImage] = useState();
+  const [editedCarouselDescription, setEditedCarouselDescription] = useState();
+  const [editedCarouselStatus, setEditedCarouselStatus] = useState();
+  const API_URL = "http://192.168.29.102:8000/api/admin/categories/create";
+  const token = localStorage.getItem("token");
 
-  const handleDeleteCarousel = () => {};
+  useEffect(() => {
+    getAllCarousel();
+  }, []);
 
-  const handleAddCarousel = () => {};
+  const getAllCarousel = async () => {
+    const res = await axios.get(
+      `http://192.168.29.102:8000/api/Carousel/listAll`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res.data.data);
+    setCarousel(res.data.data);
+  };
 
-  const handleEditCarousel = () => {};
+  const handleDeleteCarousel = async () => {
+    const data = JSON.stringify({
+      carousel_id: selectedCarousel?.carousel_id,
+    });
+
+    // const res = await axios.delete(
+    //   `http://192.168.29.102:8000/api/admin/carousel/delete`,
+    //   data,
+    //   {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: "Bearer " + token,
+    //     },
+    //   }
+    // );
+    // console.log(res);
+    let config = {
+      method: "delete",
+      url: "http://192.168.29.102:8000/api/admin/carousel/delete",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      data: data,
+    };
+    axios
+      .request(config)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleAddCarousel = async () => {
+    const form = new FormData();
+    form.append("title", carouselName);
+    form.append("carousel_image", carouselImage);
+    form.append("caption", carouselDescription);
+
+    const res = await axios.post(
+      `http://192.168.29.102:8000/api/admin/carousel/create`,
+      form,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res);
+    getAllCarousel();
+  };
+
+  const handleEditCarousel = async () => {
+    const form = new FormData();
+    form.append("title", editedCarouselName);
+    form.append("carousel_id", selectedCarousel?.carousel_id);
+    form.append("carousel_image", editedCarouselImage);
+    form.append("caption", editedCarouselDescription);
+
+    const res = await axios.post(
+      `http://192.168.29.102:8000/api/admin/carousel/update`,
+      form,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res);
+    getAllCarousel();
+  };
 
   const style = {
     position: "absolute",
@@ -51,11 +145,13 @@ const Carousel = () => {
   };
 
   const ITEM_HEIGHT = 48;
+  console.log(selectedCarousel);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event, item) => {
     setAnchorEl(event.currentTarget);
+    setSelectedCarousel(item);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -129,23 +225,25 @@ const Carousel = () => {
                   <Form.Label className="fw-bold">Name</Form.Label>
                   <FormControl
                     type="text"
-                    value={carouselName}
-                    onChange={(event) => setCarouselName(event.target.value)}
+                    placeholder={selectedCarousel?.title}
+                    onChange={(event) =>
+                      setEditedCarouselName(event.target.value)
+                    }
                   />
                   <Form.Label className="fw-bold mt-2">Image</Form.Label>
                   <FormControl
                     type="file"
                     onChange={(event) =>
-                      setCarouselImage(event.target.files[0])
+                      setEditedCarouselImage(event.target.files[0])
                     }
                   />
 
                   <Form.Label className="fw-bold mt-2">Description</Form.Label>
                   <FormControl
                     type="text"
-                    value={carouselDescription}
+                    placeholder={selectedCarousel?.caption}
                     onChange={(event) =>
-                      setCarouselDescription(event.target.value)
+                      setEditedCarouselDescription(event.target.value)
                     }
                   />
 
@@ -153,7 +251,9 @@ const Carousel = () => {
                   <Form.Select
                     className="fw-bold "
                     value={carouselStatus}
-                    onChange={(event) => setCarouselStatus(event.target.value)}
+                    onChange={(event) =>
+                      setEditedCarouselStatus(event.target.value)
+                    }
                   >
                     <option>-----</option>
                     <option value="1">Active</option>
@@ -377,55 +477,59 @@ const Carousel = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Arun</td>
-                  <td>
-                    <img
-                      src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
-                      style={{ width: 50, height: 50, borderRadius: 50 }}
-                    />
-                  </td>
-                  <td>Photo</td>
+                {carousel?.map((item, index) => (
+                  <tr>
+                    <td>{item.carousel_id}</td>
+                    <td>{item.title}</td>
+                    <td>
+                      <img
+                        src={`http://192.168.29.102:8000/${item.image_url}`}
+                        style={{ width: 50, height: 50, borderRadius: 50 }}
+                      />
+                    </td>
+                    <td>{item.caption}</td>
 
-                  <td>active</td>
-                  <td>
-                    <div>
-                      <IconButton
-                        aria-label="more"
-                        id="long-button"
-                        aria-controls={open ? "long-menu" : undefined}
-                        aria-expanded={open ? "true" : undefined}
-                        aria-haspopup="true"
-                        onClick={handleClick}
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                      <Menu
-                        id="long-menu"
-                        MenuListProps={{
-                          "aria-labelledby": "long-button",
-                        }}
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        PaperProps={{
-                          style: {
-                            maxHeight: ITEM_HEIGHT * 4.5,
-                            width: "20ch",
-                          },
-                        }}
-                      >
-                        <MenuItem key="edit" onClick={handleOpenModel}>
-                          Edit
-                        </MenuItem>
-                        <MenuItem key="remove" onClick={handleDeleteModel}>
-                          Remove
-                        </MenuItem>
-                      </Menu>
-                    </div>
-                  </td>
-                </tr>
+                    <td>{item.is_active == "yes" ? "Active" : "InAcive"}</td>
+                    <td>
+                      <div>
+                        <IconButton
+                          aria-label="more"
+                          id="long-button"
+                          aria-controls={open ? "long-menu" : undefined}
+                          aria-expanded={open ? "true" : undefined}
+                          aria-haspopup="true"
+                          onClick={(event) => {
+                            handleClick(event, item);
+                          }}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          id="long-menu"
+                          MenuListProps={{
+                            "aria-labelledby": "long-button",
+                          }}
+                          anchorEl={anchorEl}
+                          open={open}
+                          onClose={handleClose}
+                          PaperProps={{
+                            style: {
+                              maxHeight: ITEM_HEIGHT * 4.5,
+                              width: "20ch",
+                            },
+                          }}
+                        >
+                          <MenuItem key="edit" onClick={handleOpenModel}>
+                            Edit
+                          </MenuItem>
+                          <MenuItem key="remove" onClick={handleDeleteModel}>
+                            Remove
+                          </MenuItem>
+                        </Menu>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </div>

@@ -6,7 +6,7 @@ const AuthContextProvider = ({ children }) => {
   const [dbUser, setDbUser] = useState();
 
   useEffect(() => {
-    const user = localStorage.getItem("name");
+    const user = localStorage.getItem("user");
     if (user) {
       setDbUser(true);
     }

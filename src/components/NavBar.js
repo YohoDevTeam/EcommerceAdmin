@@ -29,6 +29,7 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import Popover from "@mui/material/Popover";
 import Logo from "../images/Logo.png";
+import axios from "axios";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -73,6 +74,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function NavBar() {
   const navigate = useNavigate();
   const [anchorEll, setAnchorEll] = React.useState(null);
+  const API_URL = "http://192.168.29.102:8000/api/admin/users/logout";
+
+  const token = localStorage.getItem("token");
+  // console.log(token);
+
+  const handleLogOut = async () => {
+    // const res = axios.post(API_URL);
+    const res = axios.post(API_URL, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    navigate("/");
+
+    console.log(res);
+  };
+
   const open = Boolean(anchorEll);
 
   const handleClick = (event) => {
@@ -426,11 +446,7 @@ export default function NavBar() {
 
                 <Divider />
 
-                <MenuItem
-                  onClick={() => {
-                    localStorage.removeItem("name");
-                  }}
-                >
+                <MenuItem onClick={handleLogOut}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>

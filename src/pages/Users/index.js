@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import SideBar from "../../components/SideBar";
 import NavBar from "../../components/NavBar";
@@ -17,10 +17,30 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Table from "react-bootstrap/Table";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 
 const Users = () => {
   const [userStatus, setUserStatus] = React.useState("");
+  const token = localStorage.getItem("token");
+  const [users, setUsers] = useState([]);
 
+  useEffect(() => {
+    getAllOrders();
+  }, []);
+
+  const getAllOrders = async () => {
+    const res = await axios.get(
+      `http://192.168.29.102:8000/api/admin/users/listAll`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    // console.log(res);
+    setUsers(res.data.data);
+  };
+  console.log(users);
   const handleEditUser = () => {};
   const ITEM_HEIGHT = 48;
 
@@ -212,52 +232,53 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>
-                  <img
-                    src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    style={{ width: 50, height: 50, borderRadius: 50 }}
-                  />
-                </td>
-                <td>arun</td>
-                <td>nickname</td>
-                <td>30-09-92</td>
-                <td>dg@gmail.com</td>
-                <td>958594985</td>
-                <td>Male</td>
-                <td>Active</td>
-                <td>
-                  <div>
-                    <IconButton
-                      aria-label="more"
-                      id="long-button"
-                      aria-controls={open ? "long-menu" : undefined}
-                      aria-expanded={open ? "true" : undefined}
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id="long-menu"
-                      MenuListProps={{
-                        "aria-labelledby": "long-button",
-                      }}
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose4}
-                      PaperProps={{
-                        style: {
-                          maxHeight: ITEM_HEIGHT * 4.5,
-                          width: "20ch",
-                        },
-                      }}
-                    >
-                      <MenuItem key="Edit" onClick={handleOpenModel}>
-                        Edit
-                      </MenuItem>
-                      {/* <MenuItem key="Remove" onClick={handleDeleteModel}>
+              {users[0]?.map((item, index) => (
+                <tr>
+                  <td>{item.id}</td>
+                  <td>
+                    <img
+                      src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
+                      style={{ width: 50, height: 50, borderRadius: 50 }}
+                    />
+                  </td>
+                  <td>{item.full_name}</td>
+                  <td>{item.nick_name}</td>
+                  <td>{item.dob}</td>
+                  <td>{item.email}</td>
+                  <td>{item.phone}</td>
+                  <td>{item.gender}</td>
+                  <td>{item.is_active == "yes" ? "Active" : "InActive"}</td>
+                  <td>
+                    <div>
+                      <IconButton
+                        aria-label="more"
+                        id="long-button"
+                        aria-controls={open ? "long-menu" : undefined}
+                        aria-expanded={open ? "true" : undefined}
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        id="long-menu"
+                        MenuListProps={{
+                          "aria-labelledby": "long-button",
+                        }}
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose4}
+                        PaperProps={{
+                          style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: "20ch",
+                          },
+                        }}
+                      >
+                        <MenuItem key="Edit" onClick={handleOpenModel}>
+                          Edit
+                        </MenuItem>
+                        {/* <MenuItem key="Remove" onClick={handleDeleteModel}>
                         Delete{" "}
                         <RiDeleteBinLine
                           style={{
@@ -267,12 +288,11 @@ const Users = () => {
                           }}
                         />
                       </MenuItem> */}
-                    </Menu>
-                  </div>
-                </td>
-              </tr>
-              <tr></tr>
-              <tr></tr>
+                      </Menu>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Box>

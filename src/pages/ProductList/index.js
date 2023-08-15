@@ -16,7 +16,7 @@ import MobileCompanyList from "../../components/MobileCompanyList";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CompanyForm from "../../components/CompanyForm";
 import DummyData from "../../constants/datacompanylist";
 import { BiSearch } from "react-icons/bi";
@@ -32,7 +32,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import Table from "react-bootstrap/Table";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-
+import axios from "axios";
 const ProductList = () => {
   //Hooks
   const [productName, setProductName] = useState("");
@@ -42,12 +42,59 @@ const ProductList = () => {
   const [productPrice, setproductPrice] = useState(0);
   const [productStatus, setproductStatus] = useState("");
 
-  const handleAddNewProduct = () => {};
+  const [products, setProducts] = useState([]);
+  const API_URL = "http://192.168.29.102:8000/api/admin/categories/create";
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+
+  const getAllProducts = async () => {
+    const res = await axios.get(
+      `http://192.168.29.102:8000/api/admin/products/listAll`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res);
+    setProducts(res.data.data);
+  };
+
+  const handleAddNewProduct = async () => {
+    const form = new FormData();
+    form.append("product_name", productName);
+    form.append("description", productDescription);
+    form.append("price", productPrice);
+    form.append("quantity", productQuantity);
+    form.append("images", productImages);
+    form.append("category_id", 1);
+    // form.append("category_image", categoryImage);
+
+    const data = {
+      product_name: productName,
+      description: productDescription,
+      price: productPrice,
+      total_quantity: productQuantity,
+      images: JSON.stringify(productImages),
+    };
+    const res = await axios.post(
+      `http://192.168.29.102:8000/api/admin/products/create`,
+      form,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res);
+  };
 
   const handleEditProduct = () => {};
 
   const handleDeleteProduct = () => {};
-
 
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -456,74 +503,72 @@ const ProductList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>food</td>
-                    <td>
-                      {" "}
-                      <img
-                        src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
-                        style={{ width: 50, height: 50, borderRadius: 50 }}
-                      />
-                    </td>
-                    <td>photo</td>
-                    <td>600</td>
-                    <td>400</td>
-                    <td>200</td>
-                    <td>Rs.600</td>
-                    <td>active</td>
+                  {products[0]?.map((item, index) => (
+                    <tr>
+                      <td>{item.product_id}</td>
+                      <td>{item.product_name}</td>
+                      <td>
+                        {JSON.parse(item?.images)?.map((i) => (
+                          <img
+                            src={`http://192.168.29.102:8000/${i}`}
+                            style={{ width: 50, height: 50, borderRadius: 50 }}
+                          />
+                        ))}
+                      </td>
+                      <td>{item.description}</td>
+                      <td>{item.total_quantity}</td>
+                      <td>{item.current_quantity}</td>
+                      <td>{item.sold_quantity}</td>
+                      <td>Rs.{item.price}</td>
+                      <td>{item.is_active == "yes" ? "Active" : "InActive"}</td>
 
-                    <td>
-                      <div>
-                        <IconButton
-                          aria-label="more"
-                          id="long-button"
-                          aria-controls={open ? "long-menu" : undefined}
-                          aria-expanded={open ? "true" : undefined}
-                          aria-haspopup="true"
-                          onClick={handleClick1}
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                        <Menu
-                          id="long-menu"
-                          MenuListProps={{
-                            "aria-labelledby": "long-button",
-                          }}
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose4}
-                          PaperProps={{
-                            style: {
-                              maxHeight: ITEM_HEIGHT * 4.5,
-                              width: "20ch",
-                            },
-                          }}
-                        >
-                          <MenuItem key="Edit" onClick={handleOpenModel}>
-                            Edit
-                          </MenuItem>
-                          <MenuItem key="Remove" onClick={handleDeleteModel}>
-                            Delete{" "}
-                            {/* <RiDeleteBinLine
+                      <td>
+                        <div>
+                          <IconButton
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={open ? "long-menu" : undefined}
+                            aria-expanded={open ? "true" : undefined}
+                            aria-haspopup="true"
+                            onClick={handleClick1}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                          <Menu
+                            id="long-menu"
+                            MenuListProps={{
+                              "aria-labelledby": "long-button",
+                            }}
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose4}
+                            PaperProps={{
+                              style: {
+                                maxHeight: ITEM_HEIGHT * 4.5,
+                                width: "20ch",
+                              },
+                            }}
+                          >
+                            <MenuItem key="Edit" onClick={handleOpenModel}>
+                              Edit
+                            </MenuItem>
+                            <MenuItem key="Remove" onClick={handleDeleteModel}>
+                              Delete{" "}
+                              {/* <RiDeleteBinLine
                               style={{
                                 fontSize: 28,
                                 color: "red",
                                 paddingLeft: 10,
                               }}
                             /> */}
-                          </MenuItem>
-                        
-                        </Menu>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr></tr>
-                  <tr></tr>
+                            </MenuItem>
+                          </Menu>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
-
-             
             </div>
           </div>
         </Box>

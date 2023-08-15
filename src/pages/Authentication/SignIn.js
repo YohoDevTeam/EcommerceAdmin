@@ -12,7 +12,8 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import axios from "axios";
+import { type } from '@testing-library/user-event/dist/type';
 function Copyright(props) {
   return (
     <Typography
@@ -37,12 +38,34 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
   useEffect(() => {
+    getAllCategory();
+  }, []);
+
+  const getAllCategory = async () => {
+    const res = await axios.get(
+      `https://www.bictree.xyz/api/admin/categories/read`,
+      {
+        headers: {
+          Authorization:
+            "Bearer " + "36|ymoDjUIaZtT2M12G2TyyJFTGz8ocQTYNx4NO0hhK",
+        },
+      }
+    );
+    // console.log(res);
+    console.log(res.data);
+  };
+
+  useEffect(() => {
     setTimeout(() => {
       // func
       setLoading(false);
     }, 1000);
   }, []);
+
   const [loading, setLoading] = useState(true);
+
+  // const token = localStorage.getItem("token");
+  // console.log(token);
   // useEffect(() => {
   //   localStorage.setItem("name","Mohammed Thasthakir")
 
@@ -63,15 +86,73 @@ export default function SignIn() {
       password: password,
     });
   };
+  const handleSubmit = () => {};
+  const handleRegiste = async (event) => {
+    // event.preventDefault();
+    // const data = new FormData(event.currentTarget);
+    // console.log({
+    //   email: data.get("email"),
+    //   password: data.get("password"),
+    // });
+    // localStorage.setItem("name", "Mohammed Thasthakir");
+    const data = {
+      full_name: "mohammed",
+      nick_name: "thasthakir",
+      email: "mohammed@gmail.com",
+      password: "password@123",
+      password_confirmation: "password@123",
+      is_admin: "yes",
+      dob: "1998-12-31",
+      gender: "Male",
+      phone: "515415151",
+    };
+    const res = await axios.post(
+      `https://www.bictree.xyz/api/admin/users/register`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("RESPONSE : ", res.data);
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", res.data.user);
+  };
 
-  const handleSubmit = (event) => {
+  const handleRegister = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    localStorage.setItem("name", "Mohammed Thasthakir");
+    const data = {
+      full_name: "mohammed",
+      nick_name: "thasthakir",
+      email: "mohammed@gmail.com",
+      password: "password@123",
+      password_confirmation: "password@123",
+      is_admin: "yes",
+      dob: "1998-12-31",
+      gender: "Male",
+      phone: "515415151",
+    };
+ 
+    let config = {
+      method: "post",
+      url: "https://www.bictree.xyz/api/admin/users/register",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+    axios
+      .request(config)
+      .then((res) => {
+        console.log(res.data);
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", res.data.user);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+   
   };
 
   return (
@@ -125,7 +206,7 @@ export default function SignIn() {
               <Box
                 component="form"
                 noValidate
-                onSubmit={handleSubmit}
+                onSubmit={handleRegister}
                 sx={{ mt: 1 }}
               >
                 <TextField
@@ -165,6 +246,14 @@ export default function SignIn() {
                 >
                   Sign In
                 </Button>
+                {/* <button
+                  // fullWidth
+                  // variant="contained"
+                  // sx={{ mt: 3, mb: 2 }}
+                  onClick={handleRegister}
+                >
+                  Register
+                </button> */}
                 {/* <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import SideBar from "../../components/SideBar";
 import NavBar from "../../components/NavBar";
@@ -31,8 +31,28 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Table from "react-bootstrap/Table";
 import Typography from "@mui/material/Typography";
 import { FormControl } from "react-bootstrap";
-
+import axios from "axios";
 const Orders = () => {
+  const token = localStorage.getItem("token");
+  const [orders, setOrders] = useState([]);
+  console.log(orders);
+
+  useEffect(() => {
+    getAllOrders();
+  }, []);
+
+  const getAllOrders = async () => {
+    const res = await axios.get(
+      `http://192.168.29.102:8000/api/admin/orders/lists`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    // console.log(res);
+    setOrders(res.data.data);
+  };
   const [orderStatus, setOrderStatus] = useState("");
 
   const handleCancelOrder = () => {};
@@ -199,51 +219,51 @@ const Orders = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <a href="OrderDetail">1</a>
-                    </td>
-                    <td>abc</td>
-                    <td>29-5-22</td>
-                    <td>500</td>
+                  {orders.map((item, index) => (
+                    <tr>
+                      <td>
+                        <a href="OrderDetail">{item.order_id}</a>
+                      </td>
+                      <td>{item.user_id}</td>
+                      <td>{item.order_date}</td>
+                      <td>{item.total_amount}</td>
 
-                    <td>active</td>
-                    <td>
-                      <div>
-                        <IconButton
-                          aria-label="more"
-                          id="long-button"
-                          aria-controls={open ? "long-menu" : undefined}
-                          aria-expanded={open ? "true" : undefined}
-                          aria-haspopup="true"
-                          onClick={handleClick}
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                        <Menu
-                          id="long-menu"
-                          MenuListProps={{
-                            "aria-labelledby": "long-button",
-                          }}
-                          anchorEl={anchorEl}
-                          open={open}
-                          onClose={handleClose}
-                          PaperProps={{
-                            style: {
-                              maxHeight: ITEM_HEIGHT * 4.5,
-                              width: "20ch",
-                            },
-                          }}
-                        >
-                          <MenuItem key="edit" onClick={handleOpenModel}>
-                            Edit
-                          </MenuItem>
-                        </Menu>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr></tr>
-                  <tr></tr>
+                      <td>{item.status}</td>
+                      <td>
+                        <div>
+                          <IconButton
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={open ? "long-menu" : undefined}
+                            aria-expanded={open ? "true" : undefined}
+                            aria-haspopup="true"
+                            onClick={handleClick}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+                          <Menu
+                            id="long-menu"
+                            MenuListProps={{
+                              "aria-labelledby": "long-button",
+                            }}
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            PaperProps={{
+                              style: {
+                                maxHeight: ITEM_HEIGHT * 4.5,
+                                width: "20ch",
+                              },
+                            }}
+                          >
+                            <MenuItem key="edit" onClick={handleOpenModel}>
+                              Edit
+                            </MenuItem>
+                          </Menu>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </div>
