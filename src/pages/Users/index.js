@@ -30,7 +30,7 @@ const Users = () => {
 
   const getAllOrders = async () => {
     const res = await axios.get(
-      `http://192.168.29.102:8000/api/admin/users/listAll`,
+      `https://www.bictree.xyz/api/admin/users/listAll`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -232,7 +232,7 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {users[0]?.map((item, index) => (
+              {users?.map((item, index) => (
                 <tr>
                   <td>{item.id}</td>
                   <td>

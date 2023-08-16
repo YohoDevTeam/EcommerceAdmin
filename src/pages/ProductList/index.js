@@ -42,17 +42,28 @@ const ProductList = () => {
   const [productPrice, setproductPrice] = useState(0);
   const [productStatus, setproductStatus] = useState("");
 
+  const [editedproductName, seteditedProductName] = useState("");
+  const [editedproductImages, seteditedproductImages] = useState();
+  const [editedproductDescription, seteditedproductDescription] = useState("");
+  const [editedproductQuantity, seteditedproductQuantity] = useState(0);
+  const [editedproductPrice, seteditedproductPrice] = useState(0);
+  const [editedproductStatus, seteditedproductStatus] = useState("");
+
+  const [selectedProduct, setSelectedProduct] = useState();
+
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const API_URL = "http://192.168.29.102:8000/api/admin/categories/create";
   const token = localStorage.getItem("token");
 
   useEffect(() => {
     getAllProducts();
+    getAllCategory();
   }, []);
 
   const getAllProducts = async () => {
     const res = await axios.get(
-      `http://192.168.29.102:8000/api/admin/products/listAll`,
+      `https://www.bictree.xyz/api/admin/products/listAll`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -63,13 +74,26 @@ const ProductList = () => {
     setProducts(res.data.data);
   };
 
+  const getAllCategory = async () => {
+    const res = await axios.get(
+      `https://www.bictree.xyz/api/admin/categories/read`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    // console.log(res);
+    setCategories(res.data.data);
+  };
+
   const handleAddNewProduct = async () => {
     const form = new FormData();
     form.append("product_name", productName);
     form.append("description", productDescription);
     form.append("price", productPrice);
     form.append("quantity", productQuantity);
-    form.append("images", productImages);
+    form.append("product_image[]", productImages);
     form.append("category_id", 1);
     // form.append("category_image", categoryImage);
 
@@ -81,7 +105,7 @@ const ProductList = () => {
       images: JSON.stringify(productImages),
     };
     const res = await axios.post(
-      `http://192.168.29.102:8000/api/admin/products/create`,
+      `https://www.bictree.xyz/api/admin/products/create`,
       form,
       {
         headers: {
@@ -90,17 +114,74 @@ const ProductList = () => {
       }
     );
     console.log(res);
+    getAllProducts();
   };
 
-  const handleEditProduct = () => {};
+  console.log(editedproductImages);
 
-  const handleDeleteProduct = () => {};
+  const handleEditProduct = async () => {
+    const form = new FormData();
+    form.append("product_name", editedproductName);
+    form.append("description", editedproductDescription);
+    form.append("price", editedproductDescription);
+    form.append("quantity", editedproductQuantity);
+
+    for (let i = 0; i < editedproductImages.length; i++) {
+      form.append(`product_image[${i}]`, editedproductImages[i]);
+    }
+    // form.append("product_image[]", editedproductImages);
+    form.append("category_id", 1);
+    form.append("product_id", selectedProduct?.product_id);
+    form.append("is_active", editedproductStatus);
+
+    for (let [key, val] of form.entries()) {
+      console.log("FORM", key, val);
+    }
+
+    const res = await axios.post(
+      `https://www.bictree.xyz/api/admin/products/update`,
+      form,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res);
+    getAllProducts();
+  };
+
+  const handleDeleteProduct = () => {
+    //   const data = {
+    //     category_id: selectedCategory?.category_id,
+    //   };
+    //   let config = {
+    //     method: "delete",
+    //     url: "http://192.168.29.102:8000/api/admin/categories/delete",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: "Bearer " + token,
+    //     },
+    //     data: data,
+    //   };
+    //   axios
+    //     .request(config)
+    //     .then((res) => {
+    //       console.log(res.data);
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    //   // getAllCategory();
+  };
 
   const ITEM_HEIGHT = 48;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleClick1 = (event) => {
+
+  const handleClick1 = (event, item) => {
     setAnchorEl(event.currentTarget);
+    setSelectedProduct(item);
   };
   const handleClose4 = () => {
     setAnchorEl(null);
@@ -192,13 +273,17 @@ const ProductList = () => {
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">
+                    {categories[0]?.map((item, index) => (
+                      <Dropdown.Item href="#/action-1">
+                        {item.category_name}
+                      </Dropdown.Item>
+                    ))}
+                    {/* <Dropdown.Item href="#/action-2">
                       Another action
                     </Dropdown.Item>
                     <Dropdown.Item href="#/action-3">
                       Something else
-                    </Dropdown.Item>
+                    </Dropdown.Item> */}
                   </Dropdown.Menu>
                 </Dropdown>
               </Typography>
@@ -206,30 +291,66 @@ const ProductList = () => {
                 <Row>
                   <Col>
                     <FormLabel className="fw-bold">Name</FormLabel>
-                    <FormControl type="text" />
+                    <FormControl
+                      type="text"
+                      placeholder={selectedProduct?.product_name}
+                      onChange={(event) =>
+                        seteditedProductName(event.target.value)
+                      }
+                    />
                   </Col>
                 </Row>
                 <FormLabel className="fw-bold mt-2">Images</FormLabel>
-                <FormControl type="file" multiple />
+                <FormControl
+                  type="file"
+                  multiple
+                  onChange={(event) =>
+                    seteditedproductImages(event.target.files)
+                  }
+                />
                 <FormLabel className="fw-bold mt-2">Description</FormLabel>
-                <FormControl type="text" />
+                <FormControl
+                  type="text"
+                  placeholder={selectedProduct?.description}
+                  onChange={(event) =>
+                    seteditedproductDescription(event.target.value)
+                  }
+                />
 
                 <Row className="mt-2">
                   <Col>
                     <FormLabel className="fw-bold">Price</FormLabel>
-                    <FormControl type="number" />
+                    <FormControl
+                      type="number"
+                      placeholder={selectedProduct?.price}
+                      onChange={(event) =>
+                        seteditedproductPrice(event.target.value)
+                      }
+                    />
                   </Col>
                   <Col>
                     <FormLabel className="fw-bold">Quantity</FormLabel>
-                    <FormControl type="number" />
+                    <FormControl
+                      type="number"
+                      placeholder={selectedProduct?.total_quantity}
+                      onChange={(event) =>
+                        seteditedproductQuantity(event.target.value)
+                      }
+                    />
                   </Col>
                 </Row>
 
                 <FormLabel className="mt-2 fw-bold">Status</FormLabel>
-                <Form.Select className="fw-bold ">
+                <Form.Select
+                  className="fw-bold "
+                  placeholder={selectedProduct?.status}
+                  onChange={(event) =>
+                    seteditedproductStatus(event.target.value)
+                  }
+                >
                   <option>-----</option>
-                  <option value="1">Active</option>
-                  <option value="2">In Active</option>
+                  <option value="yes">Active</option>
+                  <option value="no">In Active</option>
                 </Form.Select>
 
                 <div className="mt-5 d-flex align-items-center justify-content-between">
@@ -503,70 +624,83 @@ const ProductList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products[0]?.map((item, index) => (
-                    <tr>
-                      <td>{item.product_id}</td>
-                      <td>{item.product_name}</td>
-                      <td>
-                        {JSON.parse(item?.images)?.map((i) => (
-                          <img
-                            src={`http://192.168.29.102:8000/${i}`}
-                            style={{ width: 50, height: 50, borderRadius: 50 }}
-                          />
-                        ))}
-                      </td>
-                      <td>{item.description}</td>
-                      <td>{item.total_quantity}</td>
-                      <td>{item.current_quantity}</td>
-                      <td>{item.sold_quantity}</td>
-                      <td>Rs.{item.price}</td>
-                      <td>{item.is_active == "yes" ? "Active" : "InActive"}</td>
+                  {products &&
+                    products?.map((item, index) => (
+                      <tr>
+                        <td>{item.product_id}</td>
+                        <td>{item.product_name}</td>
+                        <td>
+                          {JSON.parse(item?.images)?.map((i) => (
+                            <img
+                              src={`https://www.bictree.xyz/public/${i}`}
+                              style={{
+                                width: 50,
+                                height: 50,
+                                borderRadius: 50,
+                              }}
+                            />
+                          ))}
+                        </td>
+                        <td>{item.description}</td>
+                        <td>{item.total_quantity}</td>
+                        <td>{item.current_quantity}</td>
+                        <td>{item.sold_quantity}</td>
+                        <td>Rs.{item.price}</td>
+                        <td>
+                          {item.is_active == "yes" ? "Active" : "InActive"}
+                        </td>
 
-                      <td>
-                        <div>
-                          <IconButton
-                            aria-label="more"
-                            id="long-button"
-                            aria-controls={open ? "long-menu" : undefined}
-                            aria-expanded={open ? "true" : undefined}
-                            aria-haspopup="true"
-                            onClick={handleClick1}
-                          >
-                            <MoreVertIcon />
-                          </IconButton>
-                          <Menu
-                            id="long-menu"
-                            MenuListProps={{
-                              "aria-labelledby": "long-button",
-                            }}
-                            anchorEl={anchorEl}
-                            open={open}
-                            onClose={handleClose4}
-                            PaperProps={{
-                              style: {
-                                maxHeight: ITEM_HEIGHT * 4.5,
-                                width: "20ch",
-                              },
-                            }}
-                          >
-                            <MenuItem key="Edit" onClick={handleOpenModel}>
-                              Edit
-                            </MenuItem>
-                            <MenuItem key="Remove" onClick={handleDeleteModel}>
-                              Delete{" "}
-                              {/* <RiDeleteBinLine
+                        <td>
+                          <div>
+                            <IconButton
+                              aria-label="more"
+                              id="long-button"
+                              aria-controls={open ? "long-menu" : undefined}
+                              aria-expanded={open ? "true" : undefined}
+                              aria-haspopup="true"
+                              onClick={(event) => {
+                                handleClick1(event, item);
+                                // handleOptions(item, event);
+                              }}
+                            >
+                              <MoreVertIcon />
+                            </IconButton>
+                            <Menu
+                              id="long-menu"
+                              MenuListProps={{
+                                "aria-labelledby": "long-button",
+                              }}
+                              anchorEl={anchorEl}
+                              open={open}
+                              onClose={handleClose4}
+                              PaperProps={{
+                                style: {
+                                  maxHeight: ITEM_HEIGHT * 4.5,
+                                  width: "20ch",
+                                },
+                              }}
+                            >
+                              <MenuItem key="Edit" onClick={handleOpenModel}>
+                                Edit
+                              </MenuItem>
+                              <MenuItem
+                                key="Remove"
+                                onClick={handleDeleteModel}
+                              >
+                                Delete{" "}
+                                {/* <RiDeleteBinLine
                               style={{
                                 fontSize: 28,
                                 color: "red",
                                 paddingLeft: 10,
                               }}
                             /> */}
-                            </MenuItem>
-                          </Menu>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                              </MenuItem>
+                            </Menu>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </Table>
             </div>

@@ -43,14 +43,14 @@ const Orders = () => {
 
   const getAllOrders = async () => {
     const res = await axios.get(
-      `http://192.168.29.102:8000/api/admin/orders/lists`,
+      `https://www.bictree.xyz/api/admin/orders/lists`,
       {
         headers: {
           Authorization: "Bearer " + token,
         },
       }
     );
-    // console.log(res);
+    console.log("ORDERS : ",res);
     setOrders(res.data.data);
   };
   const [orderStatus, setOrderStatus] = useState("");

@@ -43,10 +43,14 @@ const Category = () => {
   const [selectedCategoryImage, setselectedCategoryImage] = useState();
   const [editedCategoryName, setEditedCategoryName] = useState();
   const [editedCategoryImage, setEditedCategoryImage] = useState();
+  const [editedCategoryStatus, setEditedCategoryStatus] = useState();
   const [categoryStatus, setCategoryStatus] = useState();
 
   const [categories, setCategories] = useState([]);
   const API_URL = "http://192.168.29.102:8000/api/admin/categories/create";
+  const token = localStorage.getItem("token");
+  console.log(selectedCategory);
+  console.log(token);
 
   useEffect(() => {
     getAllCategory();
@@ -54,7 +58,7 @@ const Category = () => {
 
   const getAllCategory = async () => {
     const res = await axios.get(
-      `http://192.168.29.102:8000/api/admin/categories/read`,
+      `https://www.bictree.xyz/api/admin/categories/read`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -65,8 +69,6 @@ const Category = () => {
     setCategories(res.data.data);
   };
   // console.log("CTTEGORIES :", categories);
-  const token = localStorage.getItem("token");
-  console.log(selectedCategory);
 
   const handleAddCategory = async () => {
     const form = new FormData();
@@ -74,7 +76,7 @@ const Category = () => {
     form.append("category_image", categoryImage);
 
     const res = await axios.post(
-      `http://192.168.29.102:8000/api/admin/categories/create`,
+      `https://www.bictree.xyz/api/admin/categories/create`,
       form,
       {
         headers: {
@@ -83,13 +85,14 @@ const Category = () => {
       }
     );
     console.log(res);
+    getAllCategory();
   };
 
   const handleDeleteCategory = async () => {
     const data = {
       category_id: selectedCategory?.category_id,
     };
- 
+
     let config = {
       method: "delete",
       url: "http://192.168.29.102:8000/api/admin/categories/delete",
@@ -128,11 +131,12 @@ const Category = () => {
     form.append("category_name", editedCategoryName);
     form.append("category_id", selectedCategory?.category_id);
     form.append("category_image", editedCategoryImage);
+    form.append("is_active", editedCategoryStatus);
     // form.append("my_file", fileInput.files[0]);
     // const res = await axios.postForm(process.env.PUBLIC_ADMIN_URL, data);
 
     const res = await axios.post(
-      `http://192.168.29.102:8000/api/admin/categories/update`,
+      `https://www.bictree.xyz/api/admin/categories/update`,
       form,
       {
         headers: {
@@ -142,6 +146,7 @@ const Category = () => {
     );
     console.log(res);
   };
+  console.log(editedCategoryStatus)
 
   const handleOptions = (event, item) => {
     setAnchorEl(event.currentTarget);
@@ -251,10 +256,15 @@ const Category = () => {
                 />
 
                 <h6 className="mt-3 fw-bold">Status</h6>
-                <Form.Select className="fw-bold ">
+                <Form.Select
+                  className="fw-bold "
+                  onChange={(event) =>
+                    setEditedCategoryStatus(event.target.value)
+                  }
+                >
                   <option>-----</option>
-                  <option value="1">Active</option>
-                  <option value="2">In Active</option>
+                  <option value="yes">Active</option>
+                  <option value="no">In Active</option>
                 </Form.Select>
 
                 <div className="mt-5 d-flex align-items-center justify-content-between">
@@ -507,7 +517,7 @@ const Category = () => {
                   <td>{item.category_name}</td>
                   <td>
                     <img
-                      src={`http://192.168.29.102:8000/${item.image_path}`}
+                      src={`https://www.bictree.xyz/public/${item.image_path}`}
                       style={{ width: 50, height: 50, borderRadius: 50 }}
                     />
                   </td>

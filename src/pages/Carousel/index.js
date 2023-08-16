@@ -47,7 +47,7 @@ const Carousel = () => {
 
   const getAllCarousel = async () => {
     const res = await axios.get(
-      `http://192.168.29.102:8000/api/Carousel/listAll`,
+      `https://www.bictree.xyz/api/admin/carousel/listAll`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -76,7 +76,7 @@ const Carousel = () => {
     // console.log(res);
     let config = {
       method: "delete",
-      url: "http://192.168.29.102:8000/api/admin/carousel/delete",
+      url: "https://www.bictree.xyz/api/admin/carousel/delete",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token,
@@ -87,6 +87,7 @@ const Carousel = () => {
       .request(config)
       .then((res) => {
         console.log(res.data);
+        getAllCarousel()
       })
       .catch((e) => {
         console.log(e);
@@ -100,7 +101,7 @@ const Carousel = () => {
     form.append("caption", carouselDescription);
 
     const res = await axios.post(
-      `http://192.168.29.102:8000/api/admin/carousel/create`,
+      `https://www.bictree.xyz/api/admin/carousel/create`,
       form,
       {
         headers: {
@@ -120,7 +121,7 @@ const Carousel = () => {
     form.append("caption", editedCarouselDescription);
 
     const res = await axios.post(
-      `http://192.168.29.102:8000/api/admin/carousel/update`,
+      `https://www.bictree.xyz/api/admin/carousel/update`,
       form,
       {
         headers: {
@@ -483,7 +484,7 @@ const Carousel = () => {
                     <td>{item.title}</td>
                     <td>
                       <img
-                        src={`http://192.168.29.102:8000/${item.image_url}`}
+                        src={`https://www.bictree.xyz/public/${item.image_url}`}
                         style={{ width: 50, height: 50, borderRadius: 50 }}
                       />
                     </td>

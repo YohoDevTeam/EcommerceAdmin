@@ -13,7 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import { type } from '@testing-library/user-event/dist/type';
+
 function Copyright(props) {
   return (
     <Typography
@@ -37,9 +37,9 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  useEffect(() => {
-    getAllCategory();
-  }, []);
+  // useEffect(() => {
+  //   getAllCategory();
+  // }, []);
 
   const getAllCategory = async () => {
     const res = await axios.get(
@@ -80,15 +80,15 @@ export default function SignIn() {
     return email == "" && password == "";
   }
 
-  const handleSignIn = () => {
-    console.log({
-      email: email,
-      password: password,
-    });
-  };
+  // const handleSignIn = () => {
+  //   console.log({
+  //     email: email,
+  //     password: password,
+  //   });
+  // };
   const handleSubmit = () => {};
-  const handleRegiste = async (event) => {
-    // event.preventDefault();
+  const handleSignIn = async (event) => {
+    event.preventDefault();
     // const data = new FormData(event.currentTarget);
     // console.log({
     //   email: data.get("email"),
@@ -96,18 +96,18 @@ export default function SignIn() {
     // });
     // localStorage.setItem("name", "Mohammed Thasthakir");
     const data = {
-      full_name: "mohammed",
-      nick_name: "thasthakir",
+      // full_name: "mohammed",
+      // nick_name: "thasthakir",
       email: "mohammed@gmail.com",
       password: "password@123",
       password_confirmation: "password@123",
-      is_admin: "yes",
-      dob: "1998-12-31",
-      gender: "Male",
-      phone: "515415151",
+      // is_admin: "yes",
+      // dob: "1998-12-31",
+      // gender: "Male",
+      // phone: "515415151",
     };
     const res = await axios.post(
-      `https://www.bictree.xyz/api/admin/users/register`,
+      `https://www.bictree.xyz/api/admin/users/login`,
       data,
       {
         headers: {
@@ -133,7 +133,7 @@ export default function SignIn() {
       gender: "Male",
       phone: "515415151",
     };
- 
+
     let config = {
       method: "post",
       url: "https://www.bictree.xyz/api/admin/users/register",
@@ -152,7 +152,6 @@ export default function SignIn() {
       .catch((e) => {
         console.log(e);
       });
-   
   };
 
   return (
@@ -206,7 +205,7 @@ export default function SignIn() {
               <Box
                 component="form"
                 noValidate
-                onSubmit={handleRegister}
+                onSubmit={handleSignIn}
                 sx={{ mt: 1 }}
               >
                 <TextField
