@@ -48,8 +48,8 @@ const Navigation = () => {
           <Route path="/Transactions" element={<Transactions />} />
           <Route path="/Authentication" element={<Authentication />} />
           <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/OrderProductDetail" element={<OrderProductDetail />} />
-          <Route path="/OrderDetail" element={<OrderDetail />} />
+          <Route path="Orders/OrderDetailed/ProductDetail" element={<OrderProductDetail />} />
+          <Route path="Orders/OrderDetailed" element={<OrderDetail />} />
         </>
       ) : (
         <Route path="/" element={<SignIn />} />

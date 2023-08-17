@@ -33,9 +33,12 @@ import Table from "react-bootstrap/Table";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 
-
+import { Link, useLocation } from "react-router-dom";
 const OrderDetail = () => {
-  
+  const location = useLocation();
+
+  const data = location.state.data;
+  console.log(location.state.data);
 
   return (
     <>
@@ -44,88 +47,86 @@ const OrderDetail = () => {
       <Box sx={{ display: "flex" }}>
         <SideBar />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        
-
           <div style={{ overflowX: "hidden" }}>
-           
             <div>
-                <Row>
-               <Col>   
-              <Card style={{borderWidth:0}} >
-                <Card.Title className="text-center fw-bold">
-                    User Details
-                </Card.Title>
-                <div className="d-flex  p-2">
-                <div style={{display:"flex",alignItems:"center"}}>
-                <img src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2hlbm5haXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80" style={{width:60,height:60,borderRadius:60}}/>
-              </div>
-              <div className="mx-4">
-                <div className="fw-bold">Name: Arun</div>
-                <div className="fw-bold">PhoneNumber: 9585949856</div>
-                <div className="fw-bold">EmailId:ABC@gmail.com</div>
-              </div>
-              </div>
-              </Card>
-              </Col>
-               <Col>   
-              <Card style={{borderWidth:0}} >
-              <Card.Title className="text-center fw-bold">
-                    Address
-                </Card.Title>
-               <div className="fw-bold">
-                Address:<br/>
-                NO:5,6 sidha street,
-                Ambal Nagar,
-                Keelkatali<br/>
-                Chennai-60017
-
-               </div>
-              </Card>
-              </Col>
+              <Row>
+                <Col>
+                  <Card style={{ borderWidth: 0 }}>
+                    <Card.Title className="text-center fw-bold">
+                      User Details
+                    </Card.Title>
+                    <div className="d-flex  p-2">
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <img
+                          src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2hlbm5haXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80"
+                          style={{ width: 60, height: 60, borderRadius: 60 }}
+                        />
+                      </div>
+                      <div className="mx-4">
+                        <div className="fw-bold">
+                          Name:{data?.user?.full_name}
+                        </div>
+                        <div className="fw-bold">
+                          PhoneNumber: {data?.user?.phone}
+                        </div>
+                        <div className="fw-bold">
+                          Email: {data?.user?.email}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </Col>
+                <Col>
+                  <Card style={{ borderWidth: 0 }}>
+                    <Card.Title className="text-center fw-bold">
+                      Address
+                    </Card.Title>
+                    <div className="fw-bold">
+                      <br />
+                      {data?.address?.street}, {data?.address?.city},{" "}
+                      {data?.address?.state}
+                      <br />
+                      {data?.address?.city}-{data?.address?.postal_code}
+                    </div>
+                  </Card>
+                </Col>
               </Row>
-            
-         
-                <h4 className="fw-bold mt-3">Product List</h4>
-                  <Table
-                    striped
-                    bordered
-                    hover
-                    
-                    variant=""
-                    className="mt-3 "
-                  
-                  >
-                    <thead>
-                      <tr>
-                        <th>Images</th>
-                        <th>Product Name</th>
-                         <th>Product Price</th>
-                        <th>Quantity</th>
-                        <th>Total Price</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                      <td> <img
-                            src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
-                            style={{ width: 50, height: 50,borderRadius:50 }}
-                          /></td>
-                        <td> <a href="OrderProductDetail">Shoe</a></td>
-                        <td>8</td>
-                        <td>10</td>
-                        <td>800</td>
-                        
-                        
-                        
-                      </tr>
-                      <tr></tr>
-                      <tr></tr>
-                    </tbody>
-                  </Table>
-                <div className="d-flex justify-content-between p-3">
-               <h1>Grand Total:</h1>
-                <h1>800</h1>
-                </div>
+
+              <h4 className="fw-bold mt-3">Product List</h4>
+              <Table striped bordered hover variant="" className="mt-3 ">
+                <thead>
+                  <tr>
+                    <th>Order Id</th>
+                    <th>Product Id</th>
+                    <th>Product Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.items?.map((item, index) => (
+                    <tr>
+                      <td>{item.order_id}</td>
+                      <td>
+                        {" "}
+                        <Link
+                          to={"ProductDetail"}
+                          state={{ data: item.products }}
+                        >
+                          {item.product_id}
+                        </Link>
+                      </td>
+                      <td>{item.price}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.product_total}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+              <div className="d-flex justify-content-between p-3">
+                <h1>Grand Total:</h1>
+                <h1>{data?.total_amount}</h1>
+              </div>
             </div>
           </div>
         </Box>

@@ -13,7 +13,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-
+import { Password } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext/AuthContext";
 function Copyright(props) {
   return (
     <Typography
@@ -37,6 +39,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const { setReload } = useAuthContext();
+  const navigate = useNavigate();
   // useEffect(() => {
   //   getAllCategory();
   // }, []);
@@ -98,9 +102,9 @@ export default function SignIn() {
     const data = {
       // full_name: "mohammed",
       // nick_name: "thasthakir",
-      email: "mohammed@gmail.com",
-      password: "password@123",
-      password_confirmation: "password@123",
+      email: email,
+      password: password,
+      password_confirmation: password,
       // is_admin: "yes",
       // dob: "1998-12-31",
       // gender: "Male",
@@ -118,6 +122,8 @@ export default function SignIn() {
     console.log("RESPONSE : ", res.data);
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("user", res.data.user);
+    setReload(res.data);
+    navigate("/");
   };
 
   const handleRegister = async (event) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import SideBar from "../../components/SideBar";
 import NavBar from "../../components/NavBar";
-import { Col, FormControl, FormLabel } from "react-bootstrap";
+import { Col, FormControl, FormLabel, NavItem } from "react-bootstrap";
 import { BsSearch } from "react-icons/bs";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -32,10 +32,13 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import Table from "react-bootstrap/Table";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-
+import { useLocation } from "react-router-dom";
 
 const OrderProductDetail = () => {
- 
+  const location = useLocation();
+
+  const data = location.state.data;
+  console.log(location.state.data);
 
   return (
     <>
@@ -44,8 +47,6 @@ const OrderProductDetail = () => {
       <Box sx={{ display: "flex" }}>
         <SideBar />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-         
-
           <div style={{ overflowX: "hidden" }}>
             {/* <div className="d-flex justify-content-between">
               <Form className="d-flex">
@@ -59,61 +60,48 @@ const OrderProductDetail = () => {
             </div> */}
 
             <div>
-                <h1>Product Detail</h1>
-                  <Table
-                
-                    striped
-                    bordered
-                    hover
-                    
-                    variant=""
-                    className="mt-3 "
-                  
-                  >
-                    <thead>
-                      <tr>
-                        <th>Id</th>
-                        <th>Title</th>
-                        <th>
-                         Images
-                        </th>
-                        <th>Caption</th>
-                        <th>Total Quantity</th>
-                        <th>Current Quantity</th>
-                        <th>Sold Quantity</th>
+              <h1>Product Detail</h1>
+              <Table striped bordered hover variant="" className="mt-3 ">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Images</th>
+                    <th>Caption</th>
+                    <th>Total Quantity</th>
+                    <th>Current Quantity</th>
+                    <th>Sold Quantity</th>
 
-                        <th>Price</th>
-
-                        
-                     
-                        
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>food</td>
-                        <td> <img
-                            src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
-                            style={{ width: 50, height: 50,borderRadius:50 }}
-                          /></td>
-                        <td>photo</td>
-                        <td>600</td>
-                        <td>400</td>
-                        <td>200</td>
-                        <td>Rs.600</td>
-                        
-                        
-                        
-                          
-                      </tr>
-                      <tr></tr>
-                      <tr></tr>
-                    </tbody>
-                  </Table>
-                
-         
-              
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{data.product_id}</td>
+                    <td>{data.product_name}</td>
+                    <td>
+                      {" "}
+                      {JSON.parse(data?.images)?.map((i) => (
+                            <img
+                              src={`https://www.bictree.xyz/public/${i}`}
+                              style={{
+                                width: 50,
+                                height: 50,
+                                borderRadius: 50,
+                              }}
+                            />
+                          ))}
+                    </td>
+                    <td>{data.description}</td>
+                    <td>{data.total_quantity}</td>
+                    <td>{data.current_quantity}</td>
+                    <td>{data.sold_quantity}</td>
+                    <td>{data.price}</td>
+                  </tr>
+                  <tr></tr>
+                  <tr></tr>
+                </tbody>
+              </Table>
             </div>
           </div>
         </Box>

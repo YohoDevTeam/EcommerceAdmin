@@ -11,7 +11,7 @@ import Button from "react-bootstrap/Button";
 
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Table from "react-bootstrap/Table";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -37,24 +37,37 @@ const style = {
 
 const Category = () => {
   // Hooks
-  const [categoryImage, setCategoryImage] = useState();
+  const [categoryImage, setCategoryImage] = useState("");
   const [categoryName, setCategoryName] = useState("");
-  const [selectedCategory, setselectedCategory] = useState();
-  const [selectedCategoryImage, setselectedCategoryImage] = useState();
-  const [editedCategoryName, setEditedCategoryName] = useState();
-  const [editedCategoryImage, setEditedCategoryImage] = useState();
-  const [editedCategoryStatus, setEditedCategoryStatus] = useState();
-  const [categoryStatus, setCategoryStatus] = useState();
+  const [selectedCategory, setselectedCategory] = useState("");
+  const [selectedCategoryImage, setselectedCategoryImage] = useState("");
+  const [editedCategoryName, setEditedCategoryName] = useState("");
+  const [editedCategoryImage, setEditedCategoryImage] = useState("");
+  const [editedCategoryStatus, setEditedCategoryStatus] = useState("");
+  const [categoryStatus, setCategoryStatus] = useState("");
+
+  const namRef = useRef(null);
+  const imageRef = useRef(null);
+  const stausRef = useRef(null);
 
   const [categories, setCategories] = useState([]);
   const API_URL = "http://192.168.29.102:8000/api/admin/categories/create";
   const token = localStorage.getItem("token");
-  console.log(selectedCategory);
-  console.log(token);
+
+  console.log("EDITED IMAGE", editedCategoryImage);
 
   useEffect(() => {
     getAllCategory();
   }, []);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+
+
+  const filteredProducts = categories[0]?.filter((product) =>
+    product.category_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
 
   const getAllCategory = async () => {
     const res = await axios.get(
@@ -74,6 +87,7 @@ const Category = () => {
     const form = new FormData();
     form.append("category_name", categoryName);
     form.append("category_image", categoryImage);
+    form.append("is_active", categoryStatus);
 
     const res = await axios.post(
       `https://www.bictree.xyz/api/admin/categories/create`,
@@ -86,6 +100,8 @@ const Category = () => {
     );
     console.log(res);
     getAllCategory();
+    handleCloseModel1();
+    setOpenModel2(false);
   };
 
   const handleDeleteCategory = async () => {
@@ -95,45 +111,54 @@ const Category = () => {
 
     let config = {
       method: "delete",
-      url: "http://192.168.29.102:8000/api/admin/categories/delete",
+      url: "https://www.bictree.xyz/api/admin/categories/delete",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token,
+        Accept: "application/json",
       },
       data: data,
     };
     axios
       .request(config)
       .then((res) => {
+        getAllCategory();
+        handleRemoveModel();
         console.log(res.data);
       })
       .catch((e) => {
         console.log(e);
       });
-    getAllCategory();
-  };
 
-  const handleEditCategory = async () => {
-    // const res = await axios.delete(
-    //   `http://192.168.29.102:8000/api/admin/categories/delete`,
-    //   {
-    //     category_id: id,
-    //     category_name: name,
-    //     category_image: image,
-    //   },
+    // const res = await axios.post(
+    //   `https://www.bictree.xyz/api/admin/categories/delete`,
+    //   data,
     //   {
     //     headers: {
     //       Authorization: "Bearer " + token,
+    //       // "Content-Type": "application/json",
+    //       Accept: "application/json",
     //     },
     //   }
     // );
+    // console.log(res);
+  };
+
+  const handleEditCategory = async () => {
     const form = new FormData();
     form.append("category_name", editedCategoryName);
     form.append("category_id", selectedCategory?.category_id);
-    form.append("category_image", editedCategoryImage);
+    if (editedCategoryImage) {
+      form.append("category_image", editedCategoryImage);
+    }
     form.append("is_active", editedCategoryStatus);
-    // form.append("my_file", fileInput.files[0]);
-    // const res = await axios.postForm(process.env.PUBLIC_ADMIN_URL, data);
+
+    // form.entries().each((key,val)=>{
+    //   console.log(`${key} : ${val}`)
+    // })
+    for (let [key, val] of form.entries()) {
+      console.log("FORM", key, val);
+    }
 
     const res = await axios.post(
       `https://www.bictree.xyz/api/admin/categories/update`,
@@ -141,12 +166,21 @@ const Category = () => {
       {
         headers: {
           Authorization: "Bearer " + token,
+
+          Accept: "application/json",
         },
       }
     );
     console.log(res);
+
+    setEditModel(false);
+    handleCloseModel();
+    setselectedCategory("");
+    setEditedCategoryImage("");
+    setEditedCategoryStatus("");
+    setEditedCategoryName("");
+    getAllCategory();
   };
-  console.log(editedCategoryStatus)
 
   const handleOptions = (event, item) => {
     setAnchorEl(event.currentTarget);
@@ -189,7 +223,12 @@ const Category = () => {
     setOpenModel(true);
     handleClose();
   };
-  const handleCloseModel = () => setOpenModel(false);
+  const handleCloseModel = () => {
+    namRef.current.value = "";
+    stausRef.current.value = "";
+    imageRef.current.value = "";
+    setOpenModel(false);
+  };
 
   const [DeleteModel, setDeleteModel] = React.useState(false);
   const handleDeleteModel = () => {
@@ -241,6 +280,7 @@ const Category = () => {
               <Typography id="keep-mounted-modal-description" sx={{ mt: 3 }}>
                 <Form.Label className="fw-bold">Name</Form.Label>
                 <FormControl
+                  ref={namRef}
                   type="text"
                   placeholder={selectedCategory?.category_name}
                   onChange={(event) =>
@@ -249,6 +289,7 @@ const Category = () => {
                 />
                 <Form.Label className="fw-bold mt-3">Images</Form.Label>
                 <FormControl
+                  ref={imageRef}
                   type="file"
                   onChange={(event) =>
                     setEditedCategoryImage(event.target.files[0])
@@ -257,12 +298,12 @@ const Category = () => {
 
                 <h6 className="mt-3 fw-bold">Status</h6>
                 <Form.Select
+                  ref={stausRef}
                   className="fw-bold "
                   onChange={(event) =>
                     setEditedCategoryStatus(event.target.value)
                   }
                 >
-                  <option>-----</option>
                   <option value="yes">Active</option>
                   <option value="no">In Active</option>
                 </Form.Select>
@@ -395,8 +436,8 @@ const Category = () => {
                   className="fw-bold "
                   onChange={(evet) => setCategoryStatus(evet.target.value)}
                 >
-                  <option value="Active">Active</option>
-                  <option value="InActive">In Active</option>
+                  <option value="yes">Active</option>
+                  <option value="no">In Active</option>
                 </Form.Select>
                 <div className="mt-5 d-flex justify-content-between align-items-center">
                   <div>
@@ -490,6 +531,8 @@ const Category = () => {
               <Form.Control
                 placeholder="Search Your Order here"
                 className="w-50"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <Button type="text" className="mx-2">
                 <BiSearch />
@@ -511,7 +554,7 @@ const Category = () => {
               </tr>
             </thead>
             <tbody>
-              {categories[0]?.map((item, index) => (
+              {filteredProducts?.map((item, index) => (
                 <tr>
                   <td>{item.category_id}</td>
                   <td>{item.category_name}</td>
@@ -522,8 +565,10 @@ const Category = () => {
                     />
                   </td>
 
-                  <td style={{ color: status == "Active" ? "green" : "red" }}>
-                    {item.isActive == "yes" ? "Active" : "InActive"}
+                  <td
+                    style={{ color: item.is_active == "yes" ? "green" : "red" }}
+                  >
+                    {item.is_active == "yes" ? "Active" : "InActive"}
                   </td>
 
                   <td>

@@ -21,6 +21,7 @@ import axios from "axios";
 
 const Users = () => {
   const [userStatus, setUserStatus] = React.useState("");
+  const [selectedUser, setSelectedUser] = React.useState("");
   const token = localStorage.getItem("token");
   const [users, setUsers] = useState([]);
 
@@ -28,6 +29,11 @@ const Users = () => {
     getAllOrders();
   }, []);
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredProducts = users?.filter((product) =>
+    product.full_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const getAllOrders = async () => {
     const res = await axios.get(
       `https://www.bictree.xyz/api/admin/users/listAll`,
@@ -40,13 +46,37 @@ const Users = () => {
     // console.log(res);
     setUsers(res.data.data);
   };
-  console.log(users);
-  const handleEditUser = () => {};
+
+  console.log(selectedUser?.id);
+  const handleEditUser = async () => {
+    const data = {
+      status: userStatus,
+      id: selectedUser?.user_id,
+    };
+
+    const res = await axios.put(
+      `https://www.bictree.xyz/api/admin/users/block`,
+      {
+        status: userStatus,
+        user_id: selectedUser?.id,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res);
+    getAllOrders();
+    setCancelModel(false);
+    handleCloseModel();
+  };
   const ITEM_HEIGHT = 48;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event, item) => {
+    setSelectedUser(item);
     setAnchorEl(event.currentTarget);
   };
   const handleClose4 = () => {
@@ -119,8 +149,8 @@ const Users = () => {
                   onChange={(event) => setUserStatus(event.target.value)}
                 >
                   <option>-----</option>
-                  <option value="Active">Active</option>
-                  <option value="InActive">In Active</option>
+                  <option value="yes">Active</option>
+                  <option value="no">In Active</option>
                 </Form.Select>
                 <div className="mt-5 d-flex justify-content-between align-items-center">
                   <div>
@@ -208,7 +238,12 @@ const Users = () => {
           <div>
             <div>
               <Form className="d-flex">
-                <Form.Control placeholder="Search" className="w-25" />
+                <Form.Control
+                  placeholder="Search"
+                  className="w-25"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
                 <Button type="text" className="mx-2">
                   <BiSearch />
                   Search
@@ -232,12 +267,12 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {users?.map((item, index) => (
+              {filteredProducts?.map((item, index) => (
                 <tr>
                   <td>{item.id}</td>
                   <td>
                     <img
-                      src="https://images.pexels.com/photos/2092058/pexels-photo-2092058.jpeg?auto=compress&cs=tinysrgb&w=600"
+                      src={`https://www.bictree.xyz/public/${item.image_path}`}
                       style={{ width: 50, height: 50, borderRadius: 50 }}
                     />
                   </td>
@@ -247,7 +282,11 @@ const Users = () => {
                   <td>{item.email}</td>
                   <td>{item.phone}</td>
                   <td>{item.gender}</td>
-                  <td>{item.is_active == "yes" ? "Active" : "InActive"}</td>
+                  <td
+                    style={{ color: item.is_active == "yes" ? "green" : "red" }}
+                  >
+                    {item.is_active == "yes" ? "Active" : "InActive"}
+                  </td>
                   <td>
                     <div>
                       <IconButton
@@ -256,7 +295,10 @@ const Users = () => {
                         aria-controls={open ? "long-menu" : undefined}
                         aria-expanded={open ? "true" : undefined}
                         aria-haspopup="true"
-                        onClick={handleClick}
+                        onClick={(event) => {
+                          handleClick(event, item);
+                          // handleOptions(item, event);
+                        }}
                       >
                         <MoreVertIcon />
                       </IconButton>

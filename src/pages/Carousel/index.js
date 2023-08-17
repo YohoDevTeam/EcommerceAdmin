@@ -9,7 +9,7 @@ import { Card } from "react-bootstrap";
 import { PiPencilSimpleLineDuotone } from "react-icons/pi";
 import Button from "react-bootstrap/Button";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Table from "react-bootstrap/Table";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
@@ -33,13 +33,25 @@ const Carousel = () => {
   const [carouselDescription, setCarouselDescription] = useState("");
   const [carouselStatus, setCarouselStatus] = useState("");
   const [carousel, setCarousel] = useState([]);
-  const [selectedCarousel, setSelectedCarousel] = useState();
-  const [editedCarouselName, setEditedCarouselName] = useState();
+  const [selectedCarousel, setSelectedCarousel] = useState("");
+  const [editedCarouselName, setEditedCarouselName] = useState("");
   const [editedCarouselImage, setEditedCarouselImage] = useState();
-  const [editedCarouselDescription, setEditedCarouselDescription] = useState();
-  const [editedCarouselStatus, setEditedCarouselStatus] = useState();
+  const [editedCarouselDescription, setEditedCarouselDescription] =
+    useState("");
+  const [editedCarouselStatus, setEditedCarouselStatus] = useState("");
   const API_URL = "http://192.168.29.102:8000/api/admin/categories/create";
   const token = localStorage.getItem("token");
+
+  const nameRef = useRef(null);
+  const imageRef = useRef(null);
+  const statusRef = useRef(null);
+  const descriptionRef = useRef(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredProducts = carousel?.filter((product) =>
+    product.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     getAllCarousel();
@@ -87,7 +99,8 @@ const Carousel = () => {
       .request(config)
       .then((res) => {
         console.log(res.data);
-        getAllCarousel()
+        getAllCarousel();
+        handleRemoveModel();
       })
       .catch((e) => {
         console.log(e);
@@ -99,6 +112,7 @@ const Carousel = () => {
     form.append("title", carouselName);
     form.append("carousel_image", carouselImage);
     form.append("caption", carouselDescription);
+    form.append("is_active", carouselStatus);
 
     const res = await axios.post(
       `https://www.bictree.xyz/api/admin/carousel/create`,
@@ -111,14 +125,34 @@ const Carousel = () => {
     );
     console.log(res);
     getAllCarousel();
+    setCancelModel1(false);
+    setAddModel(false);
+    handleModel();
   };
 
   const handleEditCarousel = async () => {
     const form = new FormData();
-    form.append("title", editedCarouselName);
+    form.append(
+      "title",
+      // editedCarouselName == "" ? selectedCarousel?.title :
+      editedCarouselName
+    );
     form.append("carousel_id", selectedCarousel?.carousel_id);
     form.append("carousel_image", editedCarouselImage);
-    form.append("caption", editedCarouselDescription);
+    form.append(
+      "caption",
+      editedCarouselDescription
+      // == ""
+      //   ? selectedCarousel?.caption
+      //   : editedCarouselDescription
+    );
+    form.append(
+      "is_active",
+      editedCarouselStatus
+      // == ""
+      //   ? selectedCarousel?.is_active
+      //   : editedCarouselStatus
+    );
 
     const res = await axios.post(
       `https://www.bictree.xyz/api/admin/carousel/update`,
@@ -130,6 +164,14 @@ const Carousel = () => {
       }
     );
     console.log(res);
+    // setEditModel(false);
+    setCancelModel1(false);
+    handleCloseModel();
+    setSelectedCarousel("");
+    setEditedCarouselImage("");
+    setEditedCarouselName("");
+    setEditedCarouselDescription("");
+    setEditedCarouselStatus("");
     getAllCarousel();
   };
 
@@ -163,7 +205,13 @@ const Carousel = () => {
     setOpenModel(true);
     handleClose();
   };
-  const handleCloseModel = () => setOpenModel(false);
+  const handleCloseModel = () => {
+    nameRef.current.value = "";
+    statusRef.current.value = "";
+    imageRef.current.value = "";
+    descriptionRef.current.value = "";
+    setOpenModel(false);
+  };
 
   const [DeleteModel, setDeleteModel] = React.useState(false);
   const handleDeleteModel = () => {
@@ -226,6 +274,7 @@ const Carousel = () => {
                   <Form.Label className="fw-bold">Name</Form.Label>
                   <FormControl
                     type="text"
+                    ref={nameRef}
                     placeholder={selectedCarousel?.title}
                     onChange={(event) =>
                       setEditedCarouselName(event.target.value)
@@ -233,6 +282,7 @@ const Carousel = () => {
                   />
                   <Form.Label className="fw-bold mt-2">Image</Form.Label>
                   <FormControl
+                    ref={imageRef}
                     type="file"
                     onChange={(event) =>
                       setEditedCarouselImage(event.target.files[0])
@@ -242,6 +292,7 @@ const Carousel = () => {
                   <Form.Label className="fw-bold mt-2">Description</Form.Label>
                   <FormControl
                     type="text"
+                    ref={descriptionRef}
                     placeholder={selectedCarousel?.caption}
                     onChange={(event) =>
                       setEditedCarouselDescription(event.target.value)
@@ -250,15 +301,15 @@ const Carousel = () => {
 
                   <Form.Label className="mt-2 fw-bold">Status</Form.Label>
                   <Form.Select
+                    ref={statusRef}
                     className="fw-bold "
-                    value={carouselStatus}
                     onChange={(event) =>
                       setEditedCarouselStatus(event.target.value)
                     }
                   >
                     <option>-----</option>
-                    <option value="1">Active</option>
-                    <option value="2">In Active</option>
+                    <option value="yes">Active</option>
+                    <option value="no">In Active</option>
                   </Form.Select>
 
                   <div className="mt-5 d-flex justify-content-between align-items-center">
@@ -359,8 +410,8 @@ const Carousel = () => {
                     onChange={(event) => setCarouselStatus(event.target.value)}
                   >
                     <option>-----</option>
-                    <option value="1">Active</option>
-                    <option value="2">In Active</option>
+                    <option value="yes">Active</option>
+                    <option value="no">In Active</option>
                   </Form.Select>
 
                   <div className="mt-5 d-flex justify-content-between align-items-center">
@@ -449,7 +500,12 @@ const Carousel = () => {
 
             <div className="d-flex justify-content-between">
               <Form className="d-flex">
-                <Form.Control placeholder="Search " className="w-50" />
+                <Form.Control
+                  placeholder="Search "
+                  className="w-50"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
                 <Button type="text" className="mx-2">
                   <BiSearch />
                   Search
@@ -478,7 +534,7 @@ const Carousel = () => {
                 </tr>
               </thead>
               <tbody>
-                {carousel?.map((item, index) => (
+                {filteredProducts?.map((item, index) => (
                   <tr>
                     <td>{item.carousel_id}</td>
                     <td>{item.title}</td>
@@ -490,7 +546,13 @@ const Carousel = () => {
                     </td>
                     <td>{item.caption}</td>
 
-                    <td>{item.is_active == "yes" ? "Active" : "InAcive"}</td>
+                    <td
+                      style={{
+                        color: item.is_active == "yes" ? "green" : "red",
+                      }}
+                    >
+                      {item.is_active == "yes" ? "Active" : "InAcive"}
+                    </td>
                     <td>
                       <div>
                         <IconButton

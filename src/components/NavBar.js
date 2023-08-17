@@ -30,6 +30,7 @@ import Logout from "@mui/icons-material/Logout";
 import Popover from "@mui/material/Popover";
 import Logo from "../images/Logo.png";
 import axios from "axios";
+import { useAuthContext } from "../context/AuthContext/AuthContext";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -75,7 +76,7 @@ export default function NavBar() {
   const navigate = useNavigate();
   const [anchorEll, setAnchorEll] = React.useState(null);
   const API_URL = "http://192.168.29.102:8000/api/admin/users/logout";
-
+  const { setReload } = useAuthContext();
   const token = localStorage.getItem("token");
   // console.log(token);
 
@@ -88,9 +89,9 @@ export default function NavBar() {
     });
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    navigate("/");
 
     console.log(res);
+    setReload(res.data);
   };
 
   const open = Boolean(anchorEll);

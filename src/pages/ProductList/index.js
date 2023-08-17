@@ -50,11 +50,18 @@ const ProductList = () => {
   const [editedproductStatus, seteditedproductStatus] = useState("");
 
   const [selectedProduct, setSelectedProduct] = useState();
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const API_URL = "http://192.168.29.102:8000/api/admin/categories/create";
   const token = localStorage.getItem("token");
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredProducts = products?.filter((product) =>
+    product.product_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     getAllProducts();
@@ -93,7 +100,11 @@ const ProductList = () => {
     form.append("description", productDescription);
     form.append("price", productPrice);
     form.append("quantity", productQuantity);
-    form.append("product_image[]", productImages);
+    form.append("is_active", productStatus);
+    for (let i = 0; i < productImages?.length; i++) {
+      form.append(`product_image[${i}]`, productImages[i]);
+    }
+    // form.append("product_image[]", productImages);
     form.append("category_id", 1);
     // form.append("category_image", categoryImage);
 
@@ -115,22 +126,24 @@ const ProductList = () => {
     );
     console.log(res);
     getAllProducts();
+    setAddModel(false);
+    handleCloseModel1();
   };
 
-  console.log(editedproductImages);
+  console.log(selectedCategoryId);
 
   const handleEditProduct = async () => {
     const form = new FormData();
     form.append("product_name", editedproductName);
     form.append("description", editedproductDescription);
-    form.append("price", editedproductDescription);
+    form.append("price", editedproductPrice);
     form.append("quantity", editedproductQuantity);
 
-    for (let i = 0; i < editedproductImages.length; i++) {
+    for (let i = 0; i < editedproductImages?.length; i++) {
       form.append(`product_image[${i}]`, editedproductImages[i]);
     }
     // form.append("product_image[]", editedproductImages);
-    form.append("category_id", 1);
+    form.append("category_id", selectedCategoryId);
     form.append("product_id", selectedProduct?.product_id);
     form.append("is_active", editedproductStatus);
 
@@ -148,6 +161,8 @@ const ProductList = () => {
       }
     );
     console.log(res);
+    setEditModel(false);
+    handleCancelModel();
     getAllProducts();
   };
 
@@ -274,7 +289,9 @@ const ProductList = () => {
 
                   <Dropdown.Menu>
                     {categories[0]?.map((item, index) => (
-                      <Dropdown.Item href="#/action-1">
+                      <Dropdown.Item
+                        onClick={() => setSelectedCategoryId(item.category_id)}
+                      >
                         {item.category_name}
                       </Dropdown.Item>
                     ))}
@@ -504,8 +521,8 @@ const ProductList = () => {
                   onChange={(event) => setproductStatus(event.target.value)}
                 >
                   <option>-----</option>
-                  <option value="1">Active</option>
-                  <option value="2">In Active</option>
+                  <option value="yes">Active</option>
+                  <option value="no">In Active</option>
                 </Form.Select>
 
                 <div className="mt-5 d-flex justify-content-between align-items-center ">
@@ -595,7 +612,12 @@ const ProductList = () => {
           <div style={{ overflowX: "hidden" }}>
             <div className="d-flex justify-content-between">
               <Form className="d-flex">
-                <Form.Control placeholder="Search" className="w-50" />
+                <Form.Control
+                  placeholder="Search"
+                  className="w-50"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
                 <Button type="Search Orders" className="mx-2">
                   <BiSearch />
                   Search
@@ -624,8 +646,8 @@ const ProductList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products &&
-                    products?.map((item, index) => (
+                  {filteredProducts &&
+                    filteredProducts?.map((item, index) => (
                       <tr>
                         <td>{item.product_id}</td>
                         <td>{item.product_name}</td>
@@ -646,7 +668,11 @@ const ProductList = () => {
                         <td>{item.current_quantity}</td>
                         <td>{item.sold_quantity}</td>
                         <td>Rs.{item.price}</td>
-                        <td>
+                        <td
+                          style={{
+                            color: item.is_active == "yes" ? "green" : "red",
+                          }}
+                        >
                           {item.is_active == "yes" ? "Active" : "InActive"}
                         </td>
 

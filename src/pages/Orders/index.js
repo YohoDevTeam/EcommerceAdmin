@@ -32,14 +32,23 @@ import Table from "react-bootstrap/Table";
 import Typography from "@mui/material/Typography";
 import { FormControl } from "react-bootstrap";
 import axios from "axios";
+import { Link } from "react-router-dom";
 const Orders = () => {
   const token = localStorage.getItem("token");
   const [orders, setOrders] = useState([]);
+  const [orderStatus, setOrderStatus] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState();
   console.log(orders);
 
   useEffect(() => {
     getAllOrders();
   }, []);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredProducts = orders?.filter((product) =>
+    product.order_id.toString().includes(searchQuery.toString())
+  );
 
   const getAllOrders = async () => {
     const res = await axios.get(
@@ -50,14 +59,33 @@ const Orders = () => {
         },
       }
     );
-    console.log("ORDERS : ",res);
+    console.log("ORDERS : ", res);
     setOrders(res.data.data);
   };
-  const [orderStatus, setOrderStatus] = useState("");
 
   const handleCancelOrder = () => {};
 
-  const handleEditOrder = () => {};
+  console.log(selectedOrder);
+  const handleEditOrder = async () => {
+    const data = {
+      status: orderStatus,
+      order_id: selectedOrder?.order_id,
+    };
+
+    const res = await axios.put(
+      `https://www.bictree.xyz/api/admin/orders/status`,
+      data,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    console.log(res);
+    handleCloseModel()
+    setCancelModel(false)
+    getAllOrders();
+  };
 
   const style = {
     position: "absolute",
@@ -75,7 +103,8 @@ const Orders = () => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = (event, item) => {
+    setSelectedOrder(item);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -129,10 +158,10 @@ const Orders = () => {
                 >
                   <option>-----</option>
 
-                  <option value="Cancelled">Cancelled</option>
-                  <option value="Shipped">Shipped</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Delivered">Delivered</option>
+                  <option value="pending">Pending</option>
+                  <option value="shipped">Shipped</option>
+                  <option value="delivered">Delivered</option>
+                  <option value="cancelled">Cancelled</option>
                 </Form.Select>
 
                 <div className="mt-5 d-flex justify-content-between align-items-center">
@@ -191,6 +220,8 @@ const Orders = () => {
                 <Form.Control
                   placeholder="Search Your Order here"
                   className="w-25"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <Button type="text" className="mx-2">
                   <BiSearch />
@@ -219,10 +250,12 @@ const Orders = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders.map((item, index) => (
+                  {filteredProducts?.map((item, index) => (
                     <tr>
                       <td>
-                        <a href="OrderDetail">{item.order_id}</a>
+                        <Link to={"OrderDetailed"} state={{ data: item }}>
+                          {item.order_id}
+                        </Link>
                       </td>
                       <td>{item.user_id}</td>
                       <td>{item.order_date}</td>
@@ -237,7 +270,10 @@ const Orders = () => {
                             aria-controls={open ? "long-menu" : undefined}
                             aria-expanded={open ? "true" : undefined}
                             aria-haspopup="true"
-                            onClick={handleClick}
+                            onClick={(event) => {
+                              handleClick(event, item);
+                              // handleOptions(item, event);
+                            }}
                           >
                             <MoreVertIcon />
                           </IconButton>
