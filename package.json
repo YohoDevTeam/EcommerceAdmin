@@ -1,53 +1,58 @@
 {
-  "name": "admindashboard",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.14.3",
-    "@mui/material": "^5.14.3",
-    "@mui/x-data-grid": "^6.11.0",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.4.0",
-    "bootstrap": "^5.3.1",
-    "cdbreact": "^1.5.18",
-    "html2canvas": "^1.4.1",
-    "moment": "^2.29.4",
-    "react": "^18.2.0",
-    "react-bootstrap": "^2.8.0",
-    "react-dom": "^18.2.0",
-    "react-google-charts": "^4.0.1",
-    "react-icons": "^4.10.1",
-    "react-router-dom": "^6.14.2",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
-    "zustand": "^4.4.0"
-  },
+  "name": "ecommerceproductionapp",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "dependencies": {
+    "expo": "~49.0.15",
+    "expo-status-bar": "~1.6.0",
+    "react": "18.2.0",
+    "react-native": "0.72.6",
+    "@expo/vector-icons": "^13.0.0",
+    "@expo/webpack-config": "^18.1.2",
+    "@fawazahmed/react-native-read-more": "^3.0.3",
+    "@gorhom/bottom-sheet": "^4",
+    "@react-native-community/datetimepicker": "^7.4.1",
+    "@react-native-community/geolocation": "^3.0.6",
+    "@react-native-community/netinfo": "9.3.10",
+    "@react-navigation/bottom-tabs": "^6.5.8",
+    "@react-navigation/drawer": "^6.6.3",
+    "@react-navigation/material-top-tabs": "^6.6.3",
+    "@react-navigation/native": "^6.1.7",
+    "@react-navigation/native-stack": "^6.9.13",
+    "axios": "^1.4.0",
+    "expo-checkbox": "~2.4.0",
+    "expo-dev-client": "~2.4.12",
+    "expo-font": "~11.4.0",
+    "expo-image-picker": "~14.3.2",
+    "expo-linear-gradient": "~12.3.0",
+    "expo-location": "~16.1.0",
+    "expo-secure-store": "~12.3.1",
+    "react-dom": "18.2.0",
+    "react-native-element-dropdown": "^2.9.0",
+    "react-native-geolocation-service": "^5.3.1",
+    "react-native-gesture-handler": "~2.12.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-maps": "^1.7.1",
+    "react-native-onboarding-swiper": "^1.2.0",
+    "react-native-otp-textinput": "^1.1.1",
+    "react-native-pager-view": "6.2.0",
+    "react-native-phone-number-input": "^2.1.0",
+    "react-native-raw-bottom-sheet": "^2.2.0",
+    "react-native-reanimated": "~3.3.0",
+    "react-native-reanimated-carousel": "^3.5.1",
+    "react-native-safe-area-context": "4.6.3",
+    "react-native-screens": "~3.22.0",
+    "react-native-tab-view": "^3.5.2",
+    "react-native-web": "~0.19.6"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
 }

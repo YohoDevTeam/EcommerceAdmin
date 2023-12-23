@@ -1,26 +1,89 @@
-const COLORS = {
-  primary: "#775DA6",
-  secondary: "#70B6C1",
-  secondaryTwo: "#ABDFE7",
-  pink: "#FFB1B7",
-  pinkTwo: "#F9837C",
-  red: "#E15B2D",
-  yellow: "#FFD86C",
-  secondaryThree: "#196A73",
-  dark: "#202020",
-  darkTwo: "#484848",
-  darkThree: "#818181",
-  darkFour: "#DCDCDC",
-  darkFive: "#F5F5F5",
-  fadedOne: "#775DA6",
-  fadedTwo: "#70B6C1",
-  fadedThree: "#FFB1B7",
-  fadedFour: "#F9837C",
-  fadedFive: "#F9837C",
-  iconColor: "#84818A",
-  lineColor: "#E8E8E8",
+import { Dimensions } from "react-native";
+const { width, height } = Dimensions.get("window");
+
+export const COLORS = {
+  additionalColor4: "#C3C3C3",
+  additionalColor9: "#F3F3F3",
+  additionalColor11: "#F0FFFB",
+  additionalColor13: "#EBF3EF",
   white: "#FFFFFF",
   black: "#000000",
+  transparent: "transparent",
+  transparentWhite1: "rgba(255, 255, 255, 0.1)",
+  transparentBlack1: "rgba(0, 0, 0, 0.1)",
+  transparentBlack7: "rgba(0, 0, 0, 0.7)",
+  blue: "#0064C0",
+  darkBlue: "#111A2C",
+  darkGray: "#525C67",
+  darkGray2: "#757D85",
+  gray: "#898B9A",
+  gray2: "#BBBDC1",
+  gray3: "#CFD0D7",
+  lightGray1: "#DDDDDD",
+  lightGray2: "#F5F5F8",
+  white2: "#FBFBFB",
+  background:'#fff',
+  primary:'#E5015A'
+
+};
+export const SIZES = {
+  // global sizes
+  base: 8,
+  font: 14,
+  radius: 12,
+  padding: 24,
+
+  // font sizes
+  largeTitle: 40,
+  h1: 30,
+  h2: 22,
+  h3: 16,
+  h4: 14,
+  h5: 12,
+  body1: 30,
+  body2: 22,
+  body3: 16,
+  body4: 14,
+  body5: 12,
+
+  // app dimensions
+  width,
+  height,
+};
+export const FONTS = {
+  largeTitle: { fontFamily: "Roboto-Black", fontSize: SIZES.largeTitle },
+  h1: { fontFamily: "Roboto-Black", fontSize: SIZES.h1, lineHeight: 36 },
+  h2: { fontFamily: "Roboto-Bold", fontSize: SIZES.h2, lineHeight: 30 },
+  h3: { fontFamily: "Roboto-Bold", fontSize: SIZES.h3, lineHeight: 22 },
+  h4: { fontFamily: "Roboto-Bold", fontSize: SIZES.h4, lineHeight: 22 },
+  h5: { fontFamily: "Roboto-Bold", fontSize: SIZES.h5, lineHeight: 22 },
+  body1: {
+    fontFamily: "Roboto-Regular",
+    fontSize: SIZES.body1,
+    lineHeight: 36,
+  },
+  body2: {
+    fontFamily: "Roboto-Regular",
+    fontSize: SIZES.body2,
+    lineHeight: 30,
+  },
+  body3: {
+    fontFamily: "Roboto-Regular",
+    fontSize: SIZES.body3,
+    lineHeight: 22,
+  },
+  body4: {
+    fontFamily: "Roboto-Regular",
+    fontSize: SIZES.body4,
+    lineHeight: 22,
+  },
+  body5: {
+    fontFamily: "Roboto-Regular",
+    fontSize: SIZES.body5,
+    lineHeight: 22,
+  },
 };
 
-export default { COLORS };
+const appTheme = { COLORS, SIZES, FONTS };
+
+export default appTheme;
